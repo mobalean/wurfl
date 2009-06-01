@@ -170,7 +170,7 @@ if __FILE__ == $0
   pstoreload = false
   
   def usage
-    puts "Usage: insertWurfl.rb [-p -v -h -e patchfile] -f wurflfile"
+    puts "Usage: wurflloader.rb [-p -v -h -e patchfile] -f wurflfile"
     puts "       --file, -f (wurflfile): The master WURFL file to load."
     puts "       --extension, -e (patchfile): A patch file to extend the traits of the master WURLF file."
     puts "       --print, -p : Prints out handsets."
