@@ -3,6 +3,8 @@
 # Copyright (c) 2003, Zev Blut (zb@104.com)
 # All rights reserved.
 #
+# Copyright (c) 2009, mobalean (http://www.mobalean.com/)
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
 # met:
@@ -32,6 +34,10 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Authors: Zev Blut, Paul McMahon (paul@mobalean.com)
+
+$LOAD_PATH << File.join(File.dirname(__FILE__), '..',  'lib')
 
 require "getoptlong"
 require "net/http"

@@ -1,7 +1,9 @@
-#!/usr/local/bin/ruby -w
+#!/usr/bin/env ruby
 
 # Copyright (c) 2003, Ubiquitous Business Technology (http://ubit.com)
 # All rights reserved.
+#
+# Copyright (c) 2009, mobalean (http://www.mobalean.com/)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -33,8 +35,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# $Id: wurflsanitycheck.rb,v 1.1 2003/11/23 12:26:05 zevblut Exp $
-# Authors: Zev Blut (zb@ubit.com)
+# Authors: Zev Blut, Paul McMahon (paul@mobalean.com)
+
+$LOAD_PATH << File.join(File.dirname(__FILE__), '..',  'lib')
 
 # A simple command line tool to make sure that a wurfl file properly parses.
 # Used to make sure changes to Wurfl/Patch files are OK.
