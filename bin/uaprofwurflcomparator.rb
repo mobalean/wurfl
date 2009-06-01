@@ -42,13 +42,13 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), '..',  'lib')
 require "getoptlong"
 require "net/http"
 
-require "uaproftowurfl"
+require "wurfl/uaproftowurfl"
 require "wurfl/handset"
 require "wurfl/utils"
 include Wurfl::Utils
 
 # An addition to the UAProf to Wurfl to generate a WurflHandset from the UAProf.      
-class UAProfToWURLF
+class Wurfl::UAProfToWURLF
   def make_wurfl_handset
     hand = Wurfl::Handset.new("UAProf",@wurfl["user_agent"])
     @wurflgroups.each do |group|
