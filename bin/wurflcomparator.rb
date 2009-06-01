@@ -40,10 +40,10 @@
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..',  'lib')
 
 require "getoptlong"
-require "wurfl/wurflhandset"
-require "wurfl/wurflutils"
+require "wurfl/handset"
+require "wurfl/utils"
 
-include WurflUtils
+include Wurfl::Utils
 
 def usage
   puts "Usage: wurflcomparator.rb wurfl_pstore1_db wurfl_pstore2_db  "

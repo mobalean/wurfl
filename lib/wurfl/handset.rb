@@ -1,6 +1,8 @@
 # Copyright (c) 2003, Ubiquitous Business Technology (http://ubit.com)
 # All rights reserved.
 #
+# Copyright (c) 2009, mobalean (http://www.mobalean.com/)
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
 # met:
@@ -31,13 +33,14 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# $Id: wurflhandset.rb,v 1.1 2003/11/23 12:26:05 zevblut Exp $
-# Authors: Zev Blut (zb@ubit.com)
+# Authors: Zev Blut, Paul McMahon (paul@mobalean.com)
+
+module Wurfl; end
 
 =begin
 A class that represents a handset based on information taken from the WURFL.
 =end
-class WurflHandset
+class Wurfl::Handset
 
   extend Enumerable
 
@@ -121,7 +124,7 @@ class WurflHandset
   # false if they are not exactly equal in values, id and user agent.
   # Note: for a more detailed comparison, use the compare method.
   def ==(other)
-    return false if other.nil? || other.class != WurflHandset
+    return false if other.nil? || other.class != Wurfl::Handset
     if (self.wurfl_id == other.wurfl_id) && (self.user_agent == other.user_agent)
       other.each do |key,value|
         return false if value != self[key]

@@ -41,8 +41,8 @@ $LOAD_PATH << File.join(File.dirname(__FILE__), '..',  'lib')
 
 require "getoptlong"
 require "rexml/document"
-require "wurfl/wurflhandset"
-require "wurfl/wurflutils"
+require "wurfl/handset"
+require "wurfl/utils"
 
 =begin
 A class the handles the loading, debug printing and inserting of WURFL handsets into 
@@ -90,7 +90,7 @@ class WurflLoader
 	  puts "Updating the generic handset at count #{rcount}" if @verbose	
 	else
 	  # the generic handset has not been created.  Make it
-	  hands = WurflHandset::new "generic","generic"
+	  hands = Wurfl::Handset.new "generic","generic"
 	  @handsets["generic"] = hands
 	  @fallbacks["generic"] = Array::new
 	  puts "Made the generic handset at count #{rcount}" if @verbose	
@@ -105,7 +105,7 @@ class WurflLoader
 	  # Must have been created by someone who named it as a fallback earlier.
 	  hands = @handsets[wurflid]
 	else
-	  hands = WurflHandset::new "",""
+	  hands = Wurfl::Handset.new "",""
 	end
 	hands.wurfl_id = wurflid
 	hands.user_agent = element.attributes["user_agent"]
@@ -122,7 +122,7 @@ class WurflLoader
 	# Now set the handset to the proper fallback reference
 	if !@handsets.key?(fallb)
 	  # We have a fallback that does not exist yet, create the reference.
-	  @handsets[fallb] = WurflHandset::new "",""
+	  @handsets[fallb] = Wurfl::Handset.new "",""
 	end
 	hands.fallback = @handsets[fallb]
       end
@@ -159,7 +159,7 @@ end
 
 
 if __FILE__ == $0
-  include WurflUtils
+  include Wurfl::Utils
 
   print = false
   insert = false

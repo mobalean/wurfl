@@ -1,6 +1,8 @@
 # Copyright (c) 2003, Ubiquitous Business Technology (http://ubit.com)
 # All rights reserved.
 #
+# Copyright (c) 2009, mobalean (http://www.mobalean.com/)
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
 # met:
@@ -31,16 +33,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# $Id: wurflutils.rb,v 1.1 2003/11/23 12:26:05 zevblut Exp $
-# Authors: Zev Blut (zb@ubit.com)
+# Authors: Zev Blut, Paul McMahon (paul@mobalean.com)
 
 require "pstore"
+
+module Wurfl; end
 
 =begin
 A simple module to hold commonly used methods for the WURFL.
 This is currently just loading and saving a WURFL PStore database.
 =end
-module WurflUtils
+module Wurfl::Utils
 
   # Does not catch exception, but throws to the caller.  
   def load_wurfl_pstore(pstorefile)

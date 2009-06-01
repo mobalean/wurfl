@@ -43,14 +43,14 @@ require "getoptlong"
 require "net/http"
 
 require "uaproftowurfl"
-require "wurfl/wurflhandset"
-require "wurfl/wurflutils"
-include WurflUtils
+require "wurfl/handset"
+require "wurfl/utils"
+include Wurfl::Utils
 
 # An addition to the UAProf to Wurfl to generate a WurflHandset from the UAProf.      
 class UAProfToWURLF
   def make_wurfl_handset
-    hand = WurflHandset.new("UAProf",@wurfl["user_agent"])
+    hand = Wurfl::Handset.new("UAProf",@wurfl["user_agent"])
     @wurflgroups.each do |group|
       @wurfl[group].sort.each do |key,value|
 	hand[key] =  value

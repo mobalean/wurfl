@@ -40,8 +40,8 @@
 $LOAD_PATH << File.join(File.dirname(__FILE__), '..',  'lib')
 
 require "getoptlong"
-require "wurfl/wurflhandset"
-require "wurfl/wurflutils"
+require "wurfl/handset"
+require "wurfl/utils"
 
 =begin
 A class that lists wurfl handsets that match user specified search 
@@ -85,7 +85,7 @@ end
 
 
 if __FILE__ == $0 then
-  include WurflUtils
+  include Wurfl::Utils
 
   def usage
     puts "Usage: wurflinspector.rb  [-s rubyblock] [-i handsetid [-q attributename]]  -d pstorefile"
