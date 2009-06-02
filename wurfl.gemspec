@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/pwim/wurfl}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
+  s.rubyforge_project = %q{wurfl}
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Library and tools for manipulating the WURFL}
   s.test_files = [
