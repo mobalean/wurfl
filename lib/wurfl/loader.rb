@@ -1,5 +1,11 @@
 require "wurfl/handset"
 require "rexml/document"
+begin
+  require "xml"
+rescue LoadError
+  require "rubygems"
+  require "xml"
+end
 
 module Wurfl; end
 
@@ -30,14 +36,13 @@ class Wurfl::Loader
   
   # Returns a Hashtable of handsets and a hashtable of Fallback id and agents
   def load_wurfl(wurflfile)
-    file = File.new(wurflfile)
-    doc = REXML::Document.new file
+    doc = XML::Document.file(wurflfile)
 
     # read counter
     rcount = 0
     
     # iterate over all of the devices in the file
-    doc.elements.each("wurfl/devices/device") do |element| 
+    doc.find("//wurfl/devices/device").each do |element| 
       
       rcount += 1
       hands = nil # the reference to the current handset
@@ -87,7 +92,7 @@ class Wurfl::Loader
       end
       
       # now copy this handset's specific capabilities into it's hashtable
-      element.elements.each("./*/capability") do |el2|
+      element.find("group/capability").each do |el2|
 	hands[el2.attributes["name"]] = el2.attributes["value"]
       end
       @handsets[hands.wurfl_id] = hands
