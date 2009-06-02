@@ -35,9 +35,27 @@ class Wurfl::Loader
   end
   
   # Returns a Hashtable of handsets and a hashtable of Fallback id and agents
-  def load_wurfl(wurflfile)
-    doc = XML::Document.file(wurflfile)
+  def load_wurfl(wurflfilepath)
+    parse_wurfl(XML::Document.file(wurflfilepath))
+  end
 
+  def parse_xml(s)
+    parse_wurfl(XML::Document.string(s))
+  end
+
+  # Prints out WURFL handsets from a hashtable
+  def print_wurfl(handsets)
+    
+    handsets.each do |key,value|
+      puts "********************************************\n\n"
+      puts "#{key}\n"
+      value.each { |key,value| 	puts "#{key} = #{value}" }
+    end
+  end
+
+  private
+  
+  def parse_wurfl(doc)
     # read counter
     rcount = 0
     
@@ -106,17 +124,6 @@ class Wurfl::Loader
     end
   
     return @handsets, @fallbacks
-  end
-
-
-  # Prints out WURFL handsets from a hashtable
-  def print_wurfl(handsets)
-    
-    handsets.each do |key,value|
-      puts "********************************************\n\n"
-      puts "#{key}\n"
-      value.each { |key,value| 	puts "#{key} = #{value}" }
-    end
   end
 
 end

@@ -19,5 +19,11 @@ class TestLoader < Test::Unit::TestCase
     assert_equal("35", handsets["generic"]["max_image_height"])
   end
 
+  def test_load_wurfl_from_string
+    s = File.read(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
+    handsets, fallbacks = @loader.parse_xml(s)
+    assert_equal("300", handsets["apple_generic"]["max_image_height"])
+  end
+
 end
 
