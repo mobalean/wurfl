@@ -1,3 +1,5 @@
+require "singleton"
+
 module Wurfl; end
 
 =begin
@@ -7,7 +9,7 @@ class Wurfl::Handset
 
   extend Enumerable
 
-  attr_accessor :wurfl_id, :user_agent, :fallback
+  attr_accessor :wurfl_id, :user_agent
 
   # Constructor
   # Parameters:
@@ -15,12 +17,16 @@ class Wurfl::Handset
   # useragent: is the user agent of the handset
   # fallback: is the fallback handset that this handset
   #           uses for missing details.
-  def initialize (wurfl_id,useragent,fallback=nil) 
+  def initialize (wurfl_id, useragent, fallback = nil) 
     # A hash to hold keys and values specific to this handset
     @capabilityhash = Hash::new 
     @wurfl_id = wurfl_id
     @user_agent = useragent
-    @fallback = fallback
+    @fallback = fallback || NullHandset.instance
+  end
+
+  def fallback=(v)
+    @fallback = v || NullHandset.instance
   end
 
   # Hash accessor
@@ -29,18 +35,7 @@ class Wurfl::Handset
   # Returns:
   # The value of the key, nil if the handset does not have the key.
   def [] (key)
-    # Check if the handset actually has the key
-    if @capabilityhash.key?(key)
-      return @capabilityhash[key]
-    else
-      # The handset does not so check if the fallback handset does
-      # Note: that this is actually a recursive call.
-      if @fallback != nil
-	return @fallback[key]
-      end
-    end
-    # if it gets this far then no one has the key
-    return nil
+    @capabilityhash.key?(key) ? @capabilityhash[key] : @fallback[key]
   end
 
   # like the above accessor, but also to know who the value
@@ -48,9 +43,11 @@ class Wurfl::Handset
   # Returns:
   # the value and the id of the handset from which the value was obtained
   def get_value_and_owner(key)
-    return @capabilityhash[key],@wurfl_id if @capabilityhash.key?(key)
-    return @fallback.get_value_and_owner(key) if @fallback != nil
-    return nil,nil
+    if @capabilityhash.key?(key)
+      [ @capabilityhash[key], @wurfl_id ]
+    else
+      @fallback.get_value_and_owner(key)
+    end
   end
 
   # Setter, A method to set a key and value of the handset.
@@ -62,8 +59,7 @@ class Wurfl::Handset
   # Note: this will abstract the hash iterator to handle all the lower level
   # calls for the fallback values.
   def each
-    keys = self.keys
-    keys.each do |key|
+    self.keys.each do |key|
       # here is the magic that gives us the key and value of the handset
       # all the way up to the fallbacks end.  
       # Call the pass block with the key and value passed
@@ -73,10 +69,7 @@ class Wurfl::Handset
   
   # A method to get all of the keys that the handset has.
   def keys
-    # merge the unique keys of the handset and it's fallback
-    return @capabilityhash.keys | @fallback.keys if @fallback != nil
-    # no fallback so just return the handset's keys
-    return @capabilityhash.keys
+    @capabilityhash.keys | @fallback.keys
   end
 
   # A method to do a simple equality check against two handsets.
@@ -87,14 +80,12 @@ class Wurfl::Handset
   # false if they are not exactly equal in values, id and user agent.
   # Note: for a more detailed comparison, use the compare method.
   def ==(other)
-    return false if other.nil? || other.class != Wurfl::Handset
-    if (self.wurfl_id == other.wurfl_id) && (self.user_agent == other.user_agent)
-      other.each do |key,value|
-        return false if value != self[key]
-      end
-      return true
+    return false unless other.instance_of?(Wurfl::Handset)
+    return false unless self.wurfl_id == other.wurfl_id && self.user_agent == other.user_agent
+    other.each do |key,value|
+      return false if value != self[key]
     end
-    return false
+    true
   end
 
   # A method to compare a handset's values against another handset.
@@ -111,10 +102,16 @@ class Wurfl::Handset
     self.keys.each do |key|
       oval,oid = other.get_value_and_owner(key)
       if @capabilityhash[key].to_s != oval.to_s
-	differences<< [key,oval,oid]
+	differences << [key,oval,oid]
       end
     end
-    return differences
+    differences
   end
 
+  class NullHandset
+    include Singleton
+    def [](key) nil end
+    def get_value_and_owner(key) [ nil, nil ] end
+    def keys; [] end
+  end
 end
