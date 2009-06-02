@@ -1,4 +1,3 @@
-require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/testtask'
 require 'rubygems'
@@ -10,22 +9,19 @@ Rake::TestTask.new(:test) do |t|
   t.ruby_opts = ['-rubygems'] if defined? Gem
 end
 
-spec = Gem::Specification.new do |s|
-  s.platform = Gem::Platform::RUBY
-  s.summary = "Library and tools for manipulating the WURFL"
-  s.name = "wurfl"
-  s.version = "1.0.2"
-  s.author = "mobalean"
-  s.email = "info@mobalean.com"
-  s.homepage = "http://www.mobalean.com/"
-  s.files = FileList["{lib}/**/*"].to_a
-  s.require_path = "lib"
-  s.test_files = FileList["{test}/{lib}/**/*_test.rb"].to_a
-end
-
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_zip = true
-  pkg.need_tar = true
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "wurfl"
+    gemspec.summary = "Library and tools for manipulating the WURFL"
+    gemspec.description = "Library and tools for manipulating the WURFL"
+    gemspec.email = "info@mobalean.com"
+    gemspec.homepage = "http://github.com/pwim/wurfl"
+    gemspec.description = "TODO"
+    gemspec.authors = ["Paul McMahon", "Zev Blut"]
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
 
 Rake::RDocTask.new(:rdoc) do |rdoc|

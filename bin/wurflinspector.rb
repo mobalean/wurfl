@@ -47,97 +47,95 @@ class WurflInspector
 end
 
 
-if __FILE__ == $0 then
-  include Wurfl::Utils
+include Wurfl::Utils
 
-  def usage
-    puts "Usage: wurflinspector.rb  [-s rubyblock] [-i handsetid [-q attributename]]  -d pstorefile"
-    puts "Examples:"
-    puts "wurflinspector.rb -d pstorehandsets.db -s '{ |hand| hand[\"colors\"].to_i > 2 }'"
-    puts "wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1"
-    puts "wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1 -q backlight"
-    exit 1
-  end
+def usage
+  puts "Usage: wurflinspector.rb  [-s rubyblock] [-i handsetid [-q attributename]]  -d pstorefile"
+  puts "Examples:"
+  puts "wurflinspector.rb -d pstorehandsets.db -s '{ |hand| hand[\"colors\"].to_i > 2 }'"
+  puts "wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1"
+  puts "wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1 -q backlight"
+  exit 1
+end
 
-  pstorefile = nil
-  procstr = nil 
-  handset = nil
-  query = nil
-  begin
-    opt = GetoptLong.new(
-			 ["-d","--database", GetoptLong::REQUIRED_ARGUMENT],
-			 ["-s","--search", GetoptLong::REQUIRED_ARGUMENT],
-			 ["-i","--id", GetoptLong::REQUIRED_ARGUMENT],
-			 ["-q","--query", GetoptLong::REQUIRED_ARGUMENT]
-			 )
-    
-    opt.each do |arg,val|
-      case arg
-      when "-d"
-	pstorefile = val
-      when "-s"
-	procstr = val.strip
-      when "-i"
-	handset = val
-      when "-q"
-	query = val
-      else
-	usage
-      end
+pstorefile = nil
+procstr = nil 
+handset = nil
+query = nil
+begin
+  opt = GetoptLong.new(
+                       ["-d","--database", GetoptLong::REQUIRED_ARGUMENT],
+                       ["-s","--search", GetoptLong::REQUIRED_ARGUMENT],
+                       ["-i","--id", GetoptLong::REQUIRED_ARGUMENT],
+                       ["-q","--query", GetoptLong::REQUIRED_ARGUMENT]
+                       )
+  
+  opt.each do |arg,val|
+    case arg
+    when "-d"
+      pstorefile = val
+    when "-s"
+      procstr = val.strip
+    when "-i"
+      handset = val
+    when "-q"
+      query = val
+    else
+      usage
     end
-
-  rescue => err
-    usage
   end
 
-  if !pstorefile
-    puts "You must specify a Wurfl PStore db"
-    usage
+rescue => err
+  usage
+end
+
+if !pstorefile
+  puts "You must specify a Wurfl PStore db"
+  usage
+end
+
+begin
+  handsets, = load_wurfl_pstore(pstorefile)    
+  insp = WurflInspector.new(handsets)
+rescue => err
+  STDERR.puts "Error with file #{pstorefile}"
+  STDERR.puts err.message
+  exit 1
+end
+
+if procstr
+  pr = nil
+  eval("pr = proc#{procstr}")
+  
+  if pr.class != Proc
+    puts "You must pass a valid ruby block!"
+    exit 1
   end
   
-  begin
-    handsets, = load_wurfl_pstore(pstorefile)    
-    insp = WurflInspector.new(handsets)
-  rescue => err
-    STDERR.puts "Error with file #{pstorefile}"
-    STDERR.puts err.message
-    exit 1
-  end
-
-  if procstr
-    pr = nil
-    eval("pr = proc#{procstr}")
-    
-    if pr.class != Proc
-      puts "You must pass a valid ruby block!"
-      exit 1
-    end
-    
-    puts "--------- Searching handsets -----------"
-    res = insp.search_handsets(pr)
-    puts "Number of results: #{res.size}"
-    
-    res.each { |handset| puts handset.wurfl_id }
-    exit 0
-  end
-
-
-  if handset
-    handset = insp.get_handset(handset)
-    puts "Handset user agent: #{handset.user_agent}"
-    if query
-      puts "Result of handset query: #{query}"
-      rez = handset.get_value_and_owner(query)
-      puts "#{rez[0]} from #{rez[1]}"
-    else
-      puts "Attributes of handset"
-      keys = handset.keys
-      keys.each do |key|
-	rez = handset.get_value_and_owner(key)
-	puts "Attr:#{key} Val:#{rez[0]} from #{rez[1]}"
-      end
-    end
-    exit 0
-  end
-
+  puts "--------- Searching handsets -----------"
+  res = insp.search_handsets(pr)
+  puts "Number of results: #{res.size}"
+  
+  res.each { |handset| puts handset.wurfl_id }
+  exit 0
 end
+
+
+if handset
+  handset = insp.get_handset(handset)
+  puts "Handset user agent: #{handset.user_agent}"
+  if query
+    puts "Result of handset query: #{query}"
+    rez = handset.get_value_and_owner(query)
+    puts "#{rez[0]} from #{rez[1]}"
+  else
+    puts "Attributes of handset"
+    keys = handset.keys
+    keys.each do |key|
+      rez = handset.get_value_and_owner(key)
+      puts "Attr:#{key} Val:#{rez[0]} from #{rez[1]}"
+    end
+  end
+  exit 0
+end
+

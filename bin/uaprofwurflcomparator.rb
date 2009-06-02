@@ -114,113 +114,110 @@ def parse_url(url)
   return m[2],"/#{m[5]}",m[4]
 end
 
-if __FILE__ == $0
+def usage
+  puts "Usage: uaprofwurflcomparator.rb  -d profiledirectory -f mappingfile [-w wurfldb] [-c] [-h | --help]"
+  puts "Examples:"
+  puts "uaprofwurflcomparator.rb -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db"
+  exit 1
+end
 
-  def usage
-    puts "Usage: uaprofwurflcomparator.rb  -d profiledirectory -f mappingfile [-w wurfldb] [-c] [-h | --help]"
-    puts "Examples:"
-    puts "uaprofwurflcomparator.rb -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db"
-    exit 1
-  end
+def help
+  puts "-d --directory : The directory to store the UA Profiles found in the log file."
+  puts "-f --file : The log file that has a UAProfile to User-Agent mapping per line."
+  puts "-c --check : A flag that will make sure to check if the profile is already in the directory or not.  If it is not then it will download it."
+  puts "-w --wurfldb : A Ruby PStore Database of the WURFL, that is used to compare against the UAProfiles."
+  puts "-h --help : This message."
+  exit 1
+end
+
+profiledirectory = mappingfile = pstorefile = nil
+existancecheck = false
+begin
+  opt = GetoptLong.new(
+                       ["-d","--directory", GetoptLong::REQUIRED_ARGUMENT],
+                       ["-f","--file", GetoptLong::REQUIRED_ARGUMENT],
+                       ["-c","--check", GetoptLong::NO_ARGUMENT],
+                       ["-h","--help", GetoptLong::NO_ARGUMENT],
+                       ["-w","--wurfldb", GetoptLong::REQUIRED_ARGUMENT]
+                       )
   
-  def help
-    puts "-d --directory : The directory to store the UA Profiles found in the log file."
-    puts "-f --file : The log file that has a UAProfile to User-Agent mapping per line."
-    puts "-c --check : A flag that will make sure to check if the profile is already in the directory or not.  If it is not then it will download it."
-    puts "-w --wurfldb : A Ruby PStore Database of the WURFL, that is used to compare against the UAProfiles."
-    puts "-h --help : This message."
-    exit 1
-  end
-
-  profiledirectory = mappingfile = pstorefile = nil
-  existancecheck = false
-  begin
-    opt = GetoptLong.new(
-			 ["-d","--directory", GetoptLong::REQUIRED_ARGUMENT],
-			 ["-f","--file", GetoptLong::REQUIRED_ARGUMENT],
-			 ["-c","--check", GetoptLong::NO_ARGUMENT],
-			 ["-h","--help", GetoptLong::NO_ARGUMENT],
-			 ["-w","--wurfldb", GetoptLong::REQUIRED_ARGUMENT]
-			 )
-    
-    opt.each { |arg,val|
-      case arg
-      when "-d"
-	profiledirectory = val.strip
-      when "-f"
-	mappingfile = val.strip
-      when "-c"
-	existancecheck = true
-      when "-h"
-	help
-      when "-w"
-	pstorefile = val.strip
-      else
-	usage
-      end
-    }
-    usage if mappingfile.nil? || profiledirectory.nil?
-  rescue => err
-    usage
-  end
-
-  profiles = Hash.new
-  duplicates = Hash.new
-  mappings = parse_mapping_file(mappingfile)
-  mappings.each do |uaprof,useragent|
-    begin
-      prof_file = get_uaprofile(uaprof,profiledirectory,existancecheck)
-      uaprof_mapper = UAProfToWURLF.new
-      if profiles.key?(useragent)
-	duplicates[useragent] = Array.new if !duplicates.key?(useragent)
-	duplicates[useragent]<<uaprof
-	next
-      end
-      uaprof_mapper.parse_UAProf("#{profiledirectory}/#{prof_file}")
-      profiles[useragent] = uaprof_mapper
-    rescue => err
-      $stderr.puts "Error: File #{prof_file}; User-Agent:#{useragent}"
-      $stderr.puts "Error:#{err.message}"      
-    end  
-  end
-
-  duplicates.each do |key,profs|
-    $stderr.puts "Duplicates exist for #{key}"
-    profs.each {|prof| $stderr.puts "-- #{prof}" }
-  end
-
-  exit 0 if !pstorefile
-
-  wurflhandsets = load_pstore(pstorefile)
-  
-  puts "Comparing WURFL Handsets"
-  profiles.each do |key,val|
-    puts "",""
-    
-    if !wurflhandsets.key?(key)
-      puts "UAProf has a new Handset: #{key}"
-      puts "--------------------------------"
-      val.output_WURFL
-      puts "--------------------------------"
+  opt.each { |arg,val|
+    case arg
+    when "-d"
+      profiledirectory = val.strip
+    when "-f"
+      mappingfile = val.strip
+    when "-c"
+      existancecheck = true
+    when "-h"
+      help
+    when "-w"
+      pstorefile = val.strip
     else
-      uahand = val.make_wurfl_handset                   
-      res = uahand.compare(wurflhandsets[key])
-      if res.size > 0
-	puts "#{key} : For UAProf and WURFL differ"
-	res.each do |dkey,dval,did|
-	  next if did == "generic"
-	  #Key UAPROF Value WURFL Value WURFL source id
-	  puts "  Key:#{dkey}; UVAL:#{uahand[dkey]}; WVAL:#{dval}; WSRCID:#{did}"
-	end
-	#val["user_agent"] = key
-	puts ""
-	puts "WURFL Changes are:"
-	puts ""	  
-	val.output_WURFL(res.map {|entry| entry[0]})
-      else
-	puts "#{key} : For UAProf and WURFL match"
+      usage
+    end
+  }
+  usage if mappingfile.nil? || profiledirectory.nil?
+rescue => err
+  usage
+end
+
+profiles = Hash.new
+duplicates = Hash.new
+mappings = parse_mapping_file(mappingfile)
+mappings.each do |uaprof,useragent|
+  begin
+    prof_file = get_uaprofile(uaprof,profiledirectory,existancecheck)
+    uaprof_mapper = UAProfToWURLF.new
+    if profiles.key?(useragent)
+      duplicates[useragent] = Array.new if !duplicates.key?(useragent)
+      duplicates[useragent]<<uaprof
+      next
+    end
+    uaprof_mapper.parse_UAProf("#{profiledirectory}/#{prof_file}")
+    profiles[useragent] = uaprof_mapper
+  rescue => err
+    $stderr.puts "Error: File #{prof_file}; User-Agent:#{useragent}"
+    $stderr.puts "Error:#{err.message}"      
+  end  
+end
+
+duplicates.each do |key,profs|
+  $stderr.puts "Duplicates exist for #{key}"
+  profs.each {|prof| $stderr.puts "-- #{prof}" }
+end
+
+exit 0 if !pstorefile
+
+wurflhandsets = load_pstore(pstorefile)
+
+puts "Comparing WURFL Handsets"
+profiles.each do |key,val|
+  puts "",""
+  
+  if !wurflhandsets.key?(key)
+    puts "UAProf has a new Handset: #{key}"
+    puts "--------------------------------"
+    val.output_WURFL
+    puts "--------------------------------"
+  else
+    uahand = val.make_wurfl_handset                   
+    res = uahand.compare(wurflhandsets[key])
+    if res.size > 0
+      puts "#{key} : For UAProf and WURFL differ"
+      res.each do |dkey,dval,did|
+        next if did == "generic"
+        #Key UAPROF Value WURFL Value WURFL source id
+        puts "  Key:#{dkey}; UVAL:#{uahand[dkey]}; WVAL:#{dval}; WSRCID:#{did}"
       end
+      #val["user_agent"] = key
+      puts ""
+      puts "WURFL Changes are:"
+      puts ""	  
+      val.output_WURFL(res.map {|entry| entry[0]})
+    else
+      puts "#{key} : For UAProf and WURFL match"
     end
   end
-  
 end
+  
