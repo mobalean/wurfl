@@ -1,3 +1,5 @@
+= Overview
+
 This is a collection of libraries and command line tools written in
 Ruby for using and manipulating the WURFL.
 
@@ -7,10 +9,8 @@ possible that it will work on other versions.  If you are using Ruby
 1.6 then you will need to download REXML from
 http://raa.ruby-lang.org/list.rhtml?name=rexml
 
+= Installation
 
-
-
-Installing:
 Until an installer is written, it is best to make a symbolic link in
 your site_ruby directory called wurfl that points the directory that
 holds the wurflhandset.rb file.
@@ -18,7 +18,7 @@ This is typically in /usr/lib/ruby/site_ruby/1.6/ or
 /usr/local/lib/ruby/site_ruby depending upon your ruby installation.
 
 
-Applications:
+= Applications
 
 wurflloader.rb
 Is used to parse and load a WURFL XML file into memory or save a
@@ -156,3 +156,11 @@ mappings, and the Ruby PStore database that holds the WURFL.
 The following is a simple example of execution
 uaprofwurflcomparator.rb -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db
 
+= Copyright
+
+Copyright (c) 2009, mobalean (http://www.mobalean.com/)
+
+Copyright (c) 2003, Ubiquitous Business Technology (http://ubit.com)
+All rights reserved.
+
+Send enquiries to: mailto:info@mobalean.com
