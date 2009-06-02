@@ -60,7 +60,7 @@ class Wurfl::Loader
     rcount = 0
     
     # iterate over all of the devices in the file
-    doc.find("//wurfl/devices/device").each do |element| 
+    doc.find("///devices/device").each do |element| 
       
       rcount += 1
       hands = nil # the reference to the current handset
