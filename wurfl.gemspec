@@ -27,9 +27,13 @@ Gem::Specification.new do |s|
      "bin/wurflloader.rb",
      "bin/wurflsanitycheck.rb",
      "lib/wurfl/handset.rb",
+     "lib/wurfl/loader.rb",
      "lib/wurfl/uaproftowurfl.rb",
      "lib/wurfl/utils.rb",
-     "test/handset_test.rb"
+     "test/data/wurfl.simple.xml",
+     "test/handset_test.rb",
+     "test/loader_test.rb",
+     "wurfl.gemspec"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/pwim/wurfl}
@@ -38,7 +42,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Library and tools for manipulating the WURFL}
   s.test_files = [
-    "test/handset_test.rb"
+    "test/loader_test.rb",
+     "test/handset_test.rb"
   ]
 
   if s.respond_to? :specification_version then
