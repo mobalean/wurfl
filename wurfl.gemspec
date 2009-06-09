@@ -2,14 +2,15 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wurfl}
-  s.version = "1.0.2"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Paul McMahon", "Zev Blut"]
-  s.date = %q{2009-06-02}
+  s.date = %q{2009-06-09}
+  s.default_executable = %q{wurfltools.rb}
   s.description = %q{TODO}
   s.email = %q{info@mobalean.com}
-  s.executables = ["uaproftowurfl.rb", "wurflsanitycheck.rb", "wurflinspector.rb", "wurflloader.rb", "uaprofwurflcomparator.rb", "wurflcomparator.rb"]
+  s.executables = ["wurfltools.rb"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
@@ -20,12 +21,14 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
-     "bin/uaproftowurfl.rb",
-     "bin/uaprofwurflcomparator.rb",
-     "bin/wurflcomparator.rb",
-     "bin/wurflinspector.rb",
-     "bin/wurflloader.rb",
-     "bin/wurflsanitycheck.rb",
+     "bin/wurfltools.rb",
+     "lib/wurfl/command.rb",
+     "lib/wurfl/command/comparator.rb",
+     "lib/wurfl/command/inspector.rb",
+     "lib/wurfl/command/loader.rb",
+     "lib/wurfl/command/sanitycheck.rb",
+     "lib/wurfl/command/uaproftowurfl.rb",
+     "lib/wurfl/command/uaprofwurflcomparator.rb",
      "lib/wurfl/handset.rb",
      "lib/wurfl/loader.rb",
      "lib/wurfl/uaproftowurfl.rb",
