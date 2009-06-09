@@ -4,7 +4,7 @@ require "getoptlong"
 require "wurfl/utils"
 require "wurfl/loader"
 
-class Wurfl::Command::Wurflloader
+class Wurfl::Command::Loader < Wurfl::Command
   include Wurfl::Utils
 
   def usage

@@ -2,7 +2,7 @@ require "wurfl/command"
 
 # A simple command line tool to make sure that a wurfl file properly parses.
 # Used to make sure changes to Wurfl/Patch files are OK.
-class Wurflsanitycheck
+class Wurfl::Command::Sanitycheck < Wurfl::Command
   def execute
     if ARGV.size != 1
      puts "Must have the path of the wurfl file to check"

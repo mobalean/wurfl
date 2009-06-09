@@ -4,7 +4,7 @@ require "getoptlong"
 require "wurfl/handset"
 require "wurfl/utils"
 
-class Wurfl::Command::Wurflinspector
+class Wurfl::Command::Inspector < Wurfl::Command
 =begin
   A class that lists wurfl handsets that match user specified search 
   criteria.

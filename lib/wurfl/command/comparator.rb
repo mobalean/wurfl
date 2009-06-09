@@ -3,7 +3,7 @@ require "getoptlong"
 require "wurfl/handset"
 require "wurfl/utils"
 
-class Wurflcomparator
+class Wurfl::Command::Comparator < Wurfl::Command
   include Wurfl::Utils
 
   def usage
