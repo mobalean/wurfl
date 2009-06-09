@@ -6,14 +6,16 @@ WURFL is a collection of libraries and command line tools for using and manipula
 
 == Tools
 
-=== wurflloader.rb
+All tools are run via wurfltools.rb
+
+=== loader
 
 Is used to parse and load a WURFL XML file into memory or save a
 PStore database that is used by most of the other tools.  This
 application creates WURFL PStore databases that are essential for use
 with the other Ruby applications.
 
-=== wurflinspector.rb
+=== inspector
 
 Is a tool that will let you do various searches and queries on the
 WURFL.  This is a very simple, yet powerful program for finding
@@ -24,12 +26,15 @@ examples section for usage.
 
 The command below will search through all handsets and return the ids
 of handsets that match the passed Ruby boolean evaluation
-*) This command will return all handsets that have more than 2 colors.
-"wurflinspector.rb -d pstorehandsets.db -s '{ |hand| hand["colors"].to_i > 2 }'"
+
+This command will return all handsets that have more than 2 colors.
+
+  wurfltools.rb inspector -d pstorehandsets.db -s '{ |hand| hand["colors"].to_i > 2 }'"
+
 The Ruby query must go in between the single quote marks and needs to
 declare the WurflHandset instance variable name.
 
-*) This command shows you how you can cheat with the current design of
+This command shows you how you can cheat with the current design of
 the wurflinspector and print more user friendly results.  This example
 assumes you have the command line programs sort and uniq, but that is
 only to make the output look better. This example does the same as the
@@ -37,24 +42,27 @@ above, except that it prints out the brand name and model name of the
 matching handsets instead of the WURFL id.
 
 Note: this should all go into one command line call
-"wurflinspector.rb -d pstorehandsets.db -s '{|hand| puts
-"#{hand["brand_name"]} #{hand["model_name"]}" if hand["colors"].to_i >
-2}' | sort | uniq"
+
+  wurfltools.rb inspector -d pstorehandsets.db -s '{|hand| puts
+  "#{hand["brand_name"]} #{hand["model_name"]}" if hand["colors"].to_i >
+  2}' | sort | uniq"
 
 
 The following individual handset query commands will tell the value of
 capabilities and from where it obtained the setting.
 
-*) A command to query the handset with the id sonyericsson_t300_ver1
+A command to query the handset with the id sonyericsson_t300_ver1
 for all of its' capabilities:
-"wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1"
 
-*) A command to query the handset with the id sonyericsson_t300_ver1 for
+  wurfltools.rb inspector -d pstorehandsets.db -i sonyericsson_t300_ver1
+
+A command to query the handset with the id sonyericsson_t300_ver1 for
 backlight capability:
-"wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1 -q
-backlight"
 
-=== wurflsanitycheck.rb
+  wurfltools.rb inspector -d pstorehandsets.db -i sonyericsson_t300_ver1 -q
+  backlight
+
+=== sanitycheck
 
 Is a partial WURFL validating program.  It does a few simple
 checks to make sure the XML structure is parse-able by the wurflloader.
@@ -62,14 +70,14 @@ If you receive loading errors by the wurflloader, then you can run the
 wurflsanitycheck program to find the lines in the XML file that might
 be causing the problem.
 
-=== wurflcomparator.rb
+=== comparator
 
 Is a another simple program that will find the differences from two
 WURFL Ruby PStore databases. This is another way of finding changes
 from the different versions of the WURFL without running a diff on the
 XML files.
 
-=== uaproftowurfl.rb
+=== uaproftowurfl
 
 Is a program that takes UAProfiles and creates an equivalent WURFL
 entry.  It holds all of the mappings used to convert a UAProfile to a
@@ -97,12 +105,12 @@ the UAProfToWurfl class later.
 
 A simple usage is:
 
-  ruby uaproftowurfl.rb sampleprofile.xml
+  wurfltools.rb uaproftowurfl sampleprofile.xml
 
 Example use from a bash shell with many profiles:
 
   for i in `ls profiles`; do 
-    ruby uaproftowurfl.rb profiles/$i >output/$i.wurfl 
+    wurfltools.rb uaproftowurfl profiles/$i >output/$i.wurfl 
     2> output/$i.parser.err; 
   done
 
@@ -110,7 +118,7 @@ This assumes that you have a profiles directory with all of the UAProf
 file you wish to parse and a output directory to place the results and
 errors.
 
-=== uaprofwurflcomparator.rb
+=== uaprofwurflcomparator
 
 Is a program that compares UAProfiles against the equivalent WURFL
 entries. It takes a file that contains an UAProfile URL and an
@@ -126,12 +134,13 @@ from the given URL, a file that holds the UAProfil URL and User-Agent
 mappings, and the Ruby PStore database that holds the WURFL. 
 
 The following is a simple example of execution
-uaprofwurflcomparator.rb -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db
+
+  wurfltools.rb uaprofwurflcomparator -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db
 
 == Authors
 
-Zev Blut (Original Author)
-Paul McMahon (gem installer, refactorings)
+* Zev Blut (Original Author)
+* Paul McMahon (gem installer, refactorings)
 
 == Copyright
 
