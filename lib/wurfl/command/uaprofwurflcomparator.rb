@@ -113,9 +113,9 @@ class Wurfl::Command::Uaprofwurflcomparator
   end
 
   def usage
-    puts "Usage: uaprofwurflcomparator.rb  -d profiledirectory -f mappingfile [-w wurfldb] [-c] [-h | --help]"
+    puts "Usage: wurfltools.rb uaprofwurflcomparator -d profiledirectory -f mappingfile [-w wurfldb] [-c] [-h | --help]"
     puts "Examples:"
-    puts "uaprofwurflcomparator.rb -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db"
+    puts "wurfltools.rb uaprofwurflcomparator -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db"
     exit 1
   end
 

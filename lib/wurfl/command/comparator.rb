@@ -7,7 +7,7 @@ class Wurfl::Command::Comparator < Wurfl::Command
   include Wurfl::Utils
 
   def usage
-    puts "Usage: wurflcomparator.rb wurfl_pstore1_db wurfl_pstore2_db  "
+    puts "Usage: wurfltools.rb comparator wurfl_pstore1_db wurfl_pstore2_db  "
     exit 1
   end
 

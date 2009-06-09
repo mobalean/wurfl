@@ -49,11 +49,11 @@ class Wurfl::Command::Inspector < Wurfl::Command
   include Wurfl::Utils
 
   def usage
-    puts "Usage: wurflinspector.rb  [-s rubyblock] [-i handsetid [-q attributename]]  -d pstorefile"
+    puts "Usage: wurfltools.rb inspector  [-s rubyblock] [-i handsetid [-q attributename]]  -d pstorefile"
     puts "Examples:"
-    puts "wurflinspector.rb -d pstorehandsets.db -s '{ |hand| hand[\"colors\"].to_i > 2 }'"
-    puts "wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1"
-    puts "wurflinspector.rb -d pstorehandsets.db -i sonyericsson_t300_ver1 -q backlight"
+    puts "wurfltools.rb inspector -d pstorehandsets.db -s '{ |hand| hand[\"colors\"].to_i > 2 }'"
+    puts "wurfltools inspector -d pstorehandsets.db -i sonyericsson_t300_ver1"
+    puts "wurfltools inspector -d pstorehandsets.db -i sonyericsson_t300_ver1 -q backlight"
     exit 1
   end
 
