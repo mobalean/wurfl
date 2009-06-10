@@ -14,9 +14,9 @@ class Wurfl::Command::Comparator < Wurfl::Command
   def display_differences(hand1, hand2)
     puts "-------------------------------------"
     puts "Handset: #{hand1.user_agent} :ID: #{hand1.wurfl_id}"
-    diffkeys = hand1.compare(hand2)
-    diffkeys.each do |key,oval,oid|
-      next if hand1[key].nil? || hand2[key].nil?
+    hand1.keys.each do |key|
+      v1, v2 = hand1[key], hand2[key]
+      next if v1.nil? || v2.nil? || v1 == v2
       puts "Key:#{key}"
       puts "h1>:#{hand1[key]}"
       puts "h2<:#{hand2[key]}"
