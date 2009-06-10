@@ -11,6 +11,19 @@ class Wurfl::Command::Comparator < Wurfl::Command
     exit 1
   end
 
+  def display_differences(hand1, hand2)
+    puts "-------------------------------------"
+    puts "Handset: #{hand1.user_agent} :ID: #{hand1.wurfl_id}"
+    diffkeys = hand1.compare(hand2)
+    diffkeys.each do |key,oval,oid|
+      next if hand1[key].nil? || hand2[key].nil?
+      puts "Key:#{key}"
+      puts "h1>:#{hand1[key]}"
+      puts "h2<:#{hand2[key]}"
+    end
+    puts "-------------------------------------"
+  end
+
   def execute
     if ARGV.size != 2
       usage
@@ -49,7 +62,8 @@ class Wurfl::Command::Comparator < Wurfl::Command
     mwurfl.each do |key,handset|
       if lwurfl.key?(key)
         if handset != lwurfl[key]
-          different<< [handset,lwurfl[key]]
+          different << [handset,lwurfl[key]]
+          display_differences(handset,lwurfl[key])
         end
       else
         notfound<< handset
@@ -68,18 +82,6 @@ class Wurfl::Command::Comparator < Wurfl::Command
     puts "Different handsets: #{different.size}"
     puts "||||||||||||||||||||||||||||||||||||"
     different = different.sort { |x,y| y.first.wurfl_id <=> x.first.wurfl_id }
-    different.each do |hand1,hand2|
-      puts "-------------------------------------"
-      puts "Handset: #{hand1.user_agent} :ID: #{hand1.wurfl_id}"
-      diffkeys = hand1.compare(hand2)
-      diffkeys.each do |key,oval,oid|
-        next if hand1[key].nil? || hand2[key].nil?
-        puts "Key:#{key}"
-        puts "h1>:#{hand1[key]}"
-        puts "h2<:#{hand2[key]}"
-      end
-      puts "-------------------------------------"
-    end
 
     puts "||||||||||||||||||||||||||||||||||||"
   end
