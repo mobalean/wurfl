@@ -80,12 +80,10 @@ class Wurfl::Handset
   # false if they are not exactly equal in values, id and user agent.
   # Note: for a more detailed comparison, use the compare method.
   def ==(other)
-    return false unless other.instance_of?(Wurfl::Handset)
-    return false unless self.wurfl_id == other.wurfl_id && self.user_agent == other.user_agent
-    other.each do |key,value|
-      return false if value != self[key]
-    end
-    true
+    other.instance_of?(Wurfl::Handset) && 
+      self.wurfl_id == other.wurfl_id && 
+      self.user_agent == other.user_agent &&
+      other.keys.all? {|key| other[key] == self[key] }
   end
 
   # A method to compare a handset's values against another handset.
