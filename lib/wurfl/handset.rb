@@ -108,6 +108,13 @@ class Wurfl::Handset
 
   class NullHandset
     include Singleton
+
+    # In ruby 1.8.6 and before, this method is not public, and thus prevents
+    # NullHandsets from being deserialized
+    class << self
+      public :_load
+    end
+
     def [](key) nil end
     def get_value_and_owner(key) [ nil, nil ] end
     def keys; [] end
