@@ -123,6 +123,10 @@ class Wurfl::Command::Inspector < Wurfl::Command
 
     if handset
       handset = insp.get_handset(handset)
+      unless handset
+        puts "No handset found"
+        exit 1
+      end
       puts "Handset user agent: #{handset.user_agent}"
       if query
         puts "Result of handset query: #{query}"
