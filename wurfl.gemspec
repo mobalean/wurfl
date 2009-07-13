@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wurfl}
-  s.version = "1.1.1"
+  s.version = "1.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Paul McMahon", "Zev Blut"]
-  s.date = %q{2009-07-11}
+  s.date = %q{2009-07-13}
   s.default_executable = %q{wurfltools.rb}
   s.description = %q{TODO}
   s.email = %q{info@mobalean.com}
@@ -47,9 +47,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Library and tools for manipulating the WURFL}
   s.test_files = [
-    "test/utils_test.rb",
-     "test/loader_test.rb",
-     "test/handset_test.rb"
+    "test/loader_test.rb",
+     "test/handset_test.rb",
+     "test/utils_test.rb"
   ]
 
   if s.respond_to? :specification_version then
