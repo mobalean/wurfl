@@ -86,24 +86,9 @@ class Wurfl::Handset
       other.keys.all? {|key| other[key] == self[key] }
   end
 
-  # A method to compare a handset's values against another handset.
-  # Parameters:
-  # other: is the another WurflHandset to compare against
-  # Returns:
-  # An array of the different values.
-  # Each entry in the Array is an Array of three values.
-  # The first value is the key in which both handsets have different values.
-  # The second is the other handset's value for the key.
-  # The third is the handset id from where the other handset got it's value.
-  def compare(other)
-    differences = Array.new
-    self.keys.each do |key|
-      oval,oid = other.get_value_and_owner(key)
-      if @capabilityhash[key].to_s != oval.to_s
-	differences << [key,oval,oid]
-      end
-    end
-    differences
+  def differences(other)
+    keys = (self.keys | other.keys)
+    keys.find_all {|k| self[k] != other[k]}
   end
 
   class NullHandset

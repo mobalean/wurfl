@@ -6,6 +6,9 @@ class TestHandset < Test::Unit::TestCase
   def setup
     @f = Wurfl::Handset.new("f", "f", nil)
     @h = Wurfl::Handset.new("h", "h", @f)
+    
+    @f2 = Wurfl::Handset.new("f2", "f2_ua", nil)
+    @h2 = Wurfl::Handset.new("h2","h2_ua", @f2)
   end
 
   def test_f
@@ -51,20 +54,59 @@ class TestHandset < Test::Unit::TestCase
     assert @h == h2
   end
 
-  def test_compare
-    f2 = Wurfl::Handset.new("f2", "f2", nil)
-    h2 = Wurfl::Handset.new("h2","h2", f2)
+  def test_compare_handset_with_unmodified_fallback
     assert @h.compare(@f).empty?
+  end
+
+  def test_compare_handset_with_identical_handset
+    assert @h.compare(@h2).empty?
+  end
+
+  def test_compare_handset_that_has_extra_key
     @h["k"] = "v"
+    assert_equal [["k", nil, nil]], @h.compare(@h2)
+  end
 
-    assert_equal [["k", nil, nil]], @h.compare(h2)
+  def test_compare_handset_that_has_differing_key_value
+    @h["k"] = "v"
+    @h2["k"] = "v2"
+    assert_equal [["k", "v2", "h2"]], @h.compare(@h2)
+  end
 
-    h2["k"] = "v2"
-    assert_equal [["k", "v2", "h2"]], @h.compare(h2)
-
+  def test_compare_handsets_with_differening_fallback_key_value
     @f["j"] = "1"
-    f2["j"] = "2"
-    assert_equal [["k", "v2", "h2"], ["j", "2", "f2"]], @h.compare(h2)
+    @f2["j"] = "2"
+    assert_equal [["j", "2", "f2"]], @h.compare(@h2)
+  end
+
+  def test_differences_handset_with_unmodified_fallback
+    assert @h.differences(@f).empty?
+  end
+
+  def test_differences_handset_with_identical_handset
+    assert @h.differences(@h2).empty?
+  end
+
+  def test_differences_handset_that_has_extra_key
+    @h["k"] = "v"
+    assert_equal ["k"], @h.differences(@h2)
+  end
+
+  def test_differences_other_handset_that_has_extra_key
+    @h2["k"] = "v"
+    assert_equal ["k"], @h.differences(@h2)
+  end
+
+  def test_differences_handset_that_has_differing_key_value
+    @h["k"] = "v"
+    @h2["k"] = "v2"
+    assert_equal ["k"], @h.differences(@h2)
+  end
+
+  def test_differences_handsets_with_differening_fallback_key_value
+    @f["j"] = "1"
+    @f2["j"] = "2"
+    assert_equal ["j"], @h.differences(@h2)
   end
 
 end

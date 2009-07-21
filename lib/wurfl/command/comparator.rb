@@ -13,10 +13,11 @@ class Wurfl::Command::Comparator < Wurfl::Command
 
   def display_differences(hand1, hand2)
     puts "-------------------------------------"
-    puts "Handset: #{hand1.user_agent} :ID: #{hand1.wurfl_id}"
-    hand1.keys.each do |key|
+    puts "WURFL_ID: #{hand1.wurfl_id}" 
+    puts "Handset 1: #{hand1.user_agent}"
+    puts "Handset 2: #{hand2.user_agent}"
+    hand1.differences(hand2).each do |key|
       v1, v2 = hand1[key], hand2[key]
-      next if v1.nil? || v2.nil? || v1 == v2
       puts "Key:#{key}"
       puts "h1>:#{hand1[key]}"
       puts "h2<:#{hand2[key]}"
@@ -49,40 +50,22 @@ class Wurfl::Command::Comparator < Wurfl::Command
     puts "Comparing files: #{ARGV[0]} and #{ARGV[1]}"
     puts "-------------------------------------"
 
-    if wurfl1.size > wurfl2.size
-      mwurfl = wurfl1
-      lwurfl = wurfl2    
-    else
-      mwurfl = wurfl2
-      lwurfl = wurfl1
-    end
-
-    notfound = Array.new
-    different = Array.new
-    mwurfl.each do |key,handset|
-      if lwurfl.key?(key)
-        if handset != lwurfl[key]
-          different << [handset,lwurfl[key]]
-          display_differences(handset,lwurfl[key])
-        end
-      else
-        notfound<< handset
+    wurfl1_unknown, wurfl2_unknown, different = [],[],[]
+    (wurfl1.keys | wurfl2.keys).each do |key|
+      handset1, handset2 = wurfl1[key], wurfl2[key]
+      if !handset1
+        wurfl1_unknown << key
+      elsif !handset2
+        wurfl2_unknown << key
+      elsif handset1 != handset2
+        display_differences(handset1,handset2)
       end
     end
 
 
     puts "Comparision complete."
 
-    puts "Not Found Handsets: #{notfound.size}"
-    puts "||||||||||||||||||||||||||||||||||||"
-    notfound = notfound.sort { |x,y| y.wurfl_id <=> x.wurfl_id }
-    notfound.each { |hand| puts hand.wurfl_id }           
-    puts "||||||||||||||||||||||||||||||||||||"
-
-    puts "Different handsets: #{different.size}"
-    puts "||||||||||||||||||||||||||||||||||||"
-    different = different.sort { |x,y| y.first.wurfl_id <=> x.first.wurfl_id }
-
-    puts "||||||||||||||||||||||||||||||||||||"
+    puts "Handsets not found in wurfl1: #{wurfl1_unknown.inspect}"
+    puts "Handsets not found in wurfl2: #{wurfl2_unknown.inspect}"
   end
 end

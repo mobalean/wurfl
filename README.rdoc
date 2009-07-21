@@ -118,25 +118,6 @@ This assumes that you have a profiles directory with all of the UAProf
 file you wish to parse and a output directory to place the results and
 errors.
 
-=== uaprofwurflcomparator
-
-Is a program that compares UAProfiles against the equivalent WURFL
-entries. It takes a file that contains an UAProfile URL and an
-User-Agent per line, in addition to a Ruby Wurfl PStore database. It
-then compares the UAProfile against the Wurfl that matches the same
-User Agent.  The output is a list of the differences and a WURFL
-formatted entry showing the differences.
-
-==== Usage
-
-You pass the program a directory to save the UAProfile files taken
-from the given URL, a file that holds the UAProfil URL and User-Agent
-mappings, and the Ruby PStore database that holds the WURFL. 
-
-The following is a simple example of execution
-
-  wurfltools.rb uaprofwurflcomparator -d ./profiles -f all-profile.2003-08.log -c -w wurfl.db
-
 == Authors
 
 * Zev Blut (Original Author)
