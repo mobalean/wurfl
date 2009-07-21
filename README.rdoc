@@ -62,6 +62,38 @@ backlight capability:
   wurfltools.rb inspector -d pstorehandsets.db -i sonyericsson_t300_ver1 -q
   backlight
 
+=== uamatch
+
+Is a tool that will let you do various searches and queries on the
+WURFL based on user-agent strings.  This is a very simple, yet powerful 
+program for finding information about the handsets in the WURFL.  
+See the uamatch examples section for usage.
+
+The uamatcher will retrieve the handset descriptions with the closest 
+Levenshtein distance (also called the edit distance) to the user-agent
+string you pass as argument.  
+
+For details see:  http://en.wikipedia.org/wiki/Levenshtein_distance
+
+When more than one handset has the same distance to the user agent string queried,
+the command will iterate over the result set and print the result for each handset.
+
+The found wurfl_ids can serve as input to the inspector command.  
+You can also specifically query for a certain capability. 
+
+==== Usage
+
+The following individual handset query commands will tell the value of
+capabilities and from where it obtained the setting.
+
+A command to query the handset with the user-agent SL55 for all of its capabilities:
+
+  wurfltools.rb uamatch -d pstorehandsets.db -u SL55
+
+A command to query the handset with the id SL55 for the wallpaper_jpg capability:
+
+  wurfltools.rb uamatch -d pstorehandsets.db -u SL55 -q wallpaper_jpg
+
 === sanitycheck
 
 Is a partial WURFL validating program.  It does a few simple
@@ -122,6 +154,7 @@ errors.
 
 * Zev Blut (Original Author)
 * Paul McMahon (gem installer, refactorings)
+* Kai W. Zimmermann (uamatch)
 
 == Copyright
 
