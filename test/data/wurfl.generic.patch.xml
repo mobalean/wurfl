@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wurfl>
+  <version>
+    <ver>Test Patch</ver>
+  </version>
+  <devices>
+  <device id="generic" user_agent="" fall_back="root">
+    <group id="display">
+      <capability name="columns" value="200"/>
+    </group>
+  </device>
+  </devices>
+</wurfl>

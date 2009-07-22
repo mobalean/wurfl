@@ -17,6 +17,14 @@ class TestLoader < Test::Unit::TestCase
     assert_equal("300", handsets["apple_generic"]["max_image_height"])
     assert_equal("92", handsets["generic_xhtml"]["max_image_height"])
     assert_equal("35", handsets["generic"]["max_image_height"])
+
+  end
+
+  def test_patched_generic
+    @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
+    handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.generic.patch.xml"))
+    assert_equal("200", handsets["generic"]["columns"])
+    assert_equal("6", handsets["generic"]["rows"])
   end
 
   def test_load_wurfl_from_string
