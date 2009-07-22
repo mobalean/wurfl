@@ -49,7 +49,8 @@ class Wurfl::UserAgentMatcher
       rez.clear if shortest_distance > distance
 
       if shortest_distance >= distance
-        # always add the first handset matched and each that has the same distance as the shortest distance so far 
+        # always add the first handset matched and each that has the same 
+        # distance as the shortest distance so far 
         rez << hand
         shortest_distance = distance
       end
@@ -62,19 +63,24 @@ class Wurfl::UserAgentMatcher
 
   private
   
-  # A method to estimate and compute the Levenshtein distance (LD) based on the implementation from the Text gem.
-  # The implementation given here applies known upper and lower bounds as found at: http://en.wikipedia.org/wiki/Levenshtein_distance 
+  # A method to estimate and compute the Levenshtein distance (LD) based on the
+  # implementation from the Text gem. The implementation given here applies 
+  # known upper and lower bounds as found at: 
+  # http://en.wikipedia.org/wiki/Levenshtein_distance 
   # LD is always at least the difference of the sizes of the two strings.
-  #  -> We can safely discard the handset if the least distance is longer than the current shortest distance
+  #  -> We can safely discard the handset if the least distance is longer than 
+  #     the current shortest distance
   # LD is zero if and only if the strings are identical.
-  #  -> We can optimize the test for equality and stop searching after an exact match
+  #  -> We can optimize the test for equality and stop searching after an exact
+  #     match
   # Parameters:
   # str1: is the user-agent to look up
   # str2: is the user-agent to compare against
   # min: is the minimum distance found so far
   # s: the unpacked version of the user-agent string we look up
   # Returns:
-  # It returns the least bound estimation if the least bound is already greater than the current minimum distance
+  # It returns the least bound estimation if the least bound is already greater
+  # than the current minimum distance
   # Otherwise it will compute the Levenshtein distance of str1 and str2
   # It optimizes the check for equality
   def levenshtein_distance(str1, str2, min, s)
@@ -85,16 +91,18 @@ class Wurfl::UserAgentMatcher
     distance(s, t, min)
   end
 
-  # Compute the Levenshtein distance or stop if the minimum found so far will be exceeded.
+  # Compute the Levenshtein distance or stop if the minimum found so far will 
+  # be exceeded.
   # Optimizations:  Avoid GC, where possible reuse array
   # The distance computation in the outer loop is monotonously decreasing thus
-  # we can safely stop if the estimated possible minimum exceeds the current minimum
+  # we can safely stop if the estimated possible minimum exceeds the current
+  # minimum
   # Parameters:
   # s: is the first string, already unpacked
   # t: is the second string, already unpacked
   # min: is the minimum distance found so far
   # Returns:
-  # The routine returns the computed distance or the minimum found so far if the distance 
+  # The routine returns the computed distance or the minimum found so far if the  # distance 
   # computed so far exceeds the minimum
   def distance(s, t, min)
     n = s.length
@@ -121,8 +129,8 @@ class Wurfl::UserAgentMatcher
         e = x
       end
       d[m] = x
-      # estimate the minimum LD that still can be achieved, this will be increasing monotonously
-      # stop once we exceed the current minimum
+      # estimate the minimum LD that still can be achieved, this will be
+      # increasing monotonously stop once we exceed the current minimum
       return x - n + i + 1 if x - n + i + 1 > min
     end
     x
