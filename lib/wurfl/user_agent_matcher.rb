@@ -1,3 +1,5 @@
+module Wurfl; end
+
 =begin
   A class that lists wurfl handsets that match user_agents using the shortest 
   Levenshtein distance, also sometimes called the edit distance, 
