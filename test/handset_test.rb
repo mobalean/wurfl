@@ -54,31 +54,6 @@ class TestHandset < Test::Unit::TestCase
     assert @h == h2
   end
 
-  def test_compare_handset_with_unmodified_fallback
-    assert @h.compare(@f).empty?
-  end
-
-  def test_compare_handset_with_identical_handset
-    assert @h.compare(@h2).empty?
-  end
-
-  def test_compare_handset_that_has_extra_key
-    @h["k"] = "v"
-    assert_equal [["k", nil, nil]], @h.compare(@h2)
-  end
-
-  def test_compare_handset_that_has_differing_key_value
-    @h["k"] = "v"
-    @h2["k"] = "v2"
-    assert_equal [["k", "v2", "h2"]], @h.compare(@h2)
-  end
-
-  def test_compare_handsets_with_differening_fallback_key_value
-    @f["j"] = "1"
-    @f2["j"] = "2"
-    assert_equal [["j", "2", "f2"]], @h.compare(@h2)
-  end
-
   def test_differences_handset_with_unmodified_fallback
     assert @h.differences(@f).empty?
   end
