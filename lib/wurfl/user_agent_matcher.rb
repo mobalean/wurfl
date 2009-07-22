@@ -24,11 +24,8 @@ class Wurfl::UserAgentMatcher
   # handsets: A hashtable of wurfl handsets indexed by wurfl_id.
   def initialize(handsets)
     @handsets = handsets
-    @longest_user_agent_length = 0
-    @handsets.values.each do |hand| 
-      if(@longest_user_agent_length<hand.user_agent.length) then
-        @longest_user_agent_length = hand.user_agent.length
-      end
+    @longest_user_agent_length = @handsets.values.inject(0) do |m,hand| 
+      hand.user_agent.length > m ? hand.user_agent.length : m
     end
     @d=(0..@longest_user_agent_length).to_a
   end
@@ -38,36 +35,32 @@ class Wurfl::UserAgentMatcher
   # Parameters:
   # user_agent: is a user_agent string to be matched
   # Returns:
-  # An Array of all WurflHandsets that match the user_agent closest with the same distance
+  # An Array of all WurflHandsets that match the user_agent closest with the 
+  # same distance
   # The Levenshtein distance for these matches
   def match_handsets(user_agent)
-    rez = Array::new
-    if (user_agent.length<@longest_user_agent_length) then
-      shortest_distance = @longest_user_agent_length 
-    else
-      shortest_distance = user_agent.length
-    end
-    if $KCODE =~ /^U/i
-      unpack_rule = 'U*'
-    else
-      unpack_rule = 'C*'
-    end
+    rez = []
+    shortest_distance = [user_agent.length, @longest_user_agent_length].max
     s = user_agent.unpack(unpack_rule)
+
     @handsets.values.each do |hand|    
-      distance = levenshtein_distance(user_agent, hand.user_agent, shortest_distance, unpack_rule, s)
-      if(shortest_distance>distance)
-        # found a shorter distance match, flush old results 
-        rez = Array::new   
-      end
-      if(shortest_distance>=distance) then
+      distance = levenshtein_distance(user_agent, hand.user_agent, shortest_distance, s)
+      # found a shorter distance match, flush old results 
+      rez.clear if shortest_distance > distance
+
+      if shortest_distance >= distance
         # always add the first handset matched and each that has the same distance as the shortest distance so far 
         rez << hand
-        shortest_distance=distance
+        shortest_distance = distance
       end
-      if shortest_distance==0 then return rez, 0 end
+
+      break if shortest_distance == 0
     end
+
     return rez, shortest_distance 
   end
+
+  private
   
   # A method to estimate and compute the Levenshtein distance (LD) based on the implementation from the Text gem.
   # The implementation given here applies known upper and lower bounds as found at: http://en.wikipedia.org/wiki/Levenshtein_distance 
@@ -79,23 +72,17 @@ class Wurfl::UserAgentMatcher
   # str1: is the user-agent to look up
   # str2: is the user-agent to compare against
   # min: is the minimum distance found so far
-  # unpack_rule:  the rule by which to unpack the string into an array
   # s: the unpacked version of the user-agent string we look up
   # Returns:
   # It returns the least bound estimation if the least bound is already greater than the current minimum distance
   # Otherwise it will compute the Levenshtein distance of str1 and str2
   # It optimizes the check for equality
-  def levenshtein_distance ( str1, str2, min, unpack_rule, s )
-    diff=(str1.length-str2.length).abs
-    if(diff==0) then 
-      if(str1==str2)then
-        return 0
-      end
-    elsif (diff>min)
-      return diff
-    end
+  def levenshtein_distance(str1, str2, min, s)
+    diff = (str1.length - str2.length).abs
+    return 0 if diff == 0 && str1 == str2
+    return diff if diff > min
     t = str2.unpack(unpack_rule)
-    return distance(s, t, min)
+    distance(s, t, min)
   end
 
   # Compute the Levenshtein distance or stop if the minimum found so far will be exceeded.
@@ -112,13 +99,14 @@ class Wurfl::UserAgentMatcher
   def distance(s, t, min)
     n = s.length
     m = t.length
-    return m if (0 == n)
-    return n if (0 == m)
+    return m if 0 == n
+    return n if 0 == m
 
-    d=@d
+    d = @d # Optimization: Avoid GC by reusing array
     (0...m).each do |j|
-      d[j]=j
+      d[j] = j
     end
+
     x = 0
     (0...n).each do |i|
       e = i+1
@@ -126,17 +114,21 @@ class Wurfl::UserAgentMatcher
         cost = (s[i] == t[j]) ? 0 : 1
         x = d[j+1] + 1 # insertion
         y = e+1
-        x = y if (y<x) # deletion
+        x = y if y < x # deletion
         z = d[j] + cost
-        x = z if (z<x) # substitution
+        x = z if z < x # substitution
         d[j] = e
         e = x
       end
       d[m] = x
       # estimate the minimum LD that still can be achieved, this will be increasing monotonously
       # stop once we exceed the current minimum
-      if x-n+i+1 > min then return x-n+i+1 end
+      return x - n + i + 1 if x - n + i + 1 > min
     end
-    return x
+    x
+  end
+
+  def unpack_rule
+    $KCODE =~ /^U/i ? 'U*' : 'C*'
   end
 end
