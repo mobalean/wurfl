@@ -15,12 +15,11 @@ handsets into a handset DB.
 =end
 class Wurfl::Loader
   
-  attr_accessor :new_hands, :ttl_keys, :verbose
+  attr_accessor :new_hands, :ttl_keys
 
   def initialize 
     @new_hands = 0
     @ttl_keys = 0  
-    @verbose = false
     @handsets = Hash::new
     @fallbacks = Hash::new
   end
@@ -69,13 +68,11 @@ class Wurfl::Loader
 	
 	if @handsets.key?("generic") then
 	  hands = @handsets["generic"]
-	  puts "Updating the generic handset at count #{rcount}" if @verbose	
 	else
 	  # the generic handset has not been created.  Make it
 	  hands = Wurfl::Handset.new "generic","generic"
 	  @handsets["generic"] = hands
 	  @fallbacks["generic"] = Array::new
-	  puts "Made the generic handset at count #{rcount}" if @verbose	
 	end
 	
       else
@@ -115,12 +112,6 @@ class Wurfl::Loader
       end
       @handsets[hands.wurfl_id] = hands
       
-      # Do some error checking
-      if hands.wurfl_id.nil? 
-	puts "a handset with a nil id at #{rcount}" 
-      elsif hands.user_agent.nil? 
-	puts "a handset with a nil agent at #{rcount}"
-      end           
     end
   
     return @handsets, @fallbacks

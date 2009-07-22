@@ -12,7 +12,6 @@ class Wurfl::Command::Loader < Wurfl::Command
     puts "       --file, -f (wurflfile): The master WURFL file to load."
     puts "       --extension, -e (patchfile): A patch file to extend the traits of the master WURLF file."
     puts "       --print, -p : Prints out handsets."
-    puts "       --verbose, -v : Verbose output."
     puts "       --help, -h : Prints this message."
     puts "       --database, -d (databasename): Makes a PStore database for quick loading of data with other tools."
     puts "       --load, -l (databasename): Loads handsets from a PStore database instead of XML file."
@@ -22,7 +21,6 @@ class Wurfl::Command::Loader < Wurfl::Command
   def execute
     print = false
     insert = false
-    verbose = false
     wurflfile = nil
     patchfile = nil
     pstorefile = nil
@@ -32,7 +30,6 @@ class Wurfl::Command::Loader < Wurfl::Command
       options = GetoptLong.new(
                                ["-p","--print", GetoptLong::NO_ARGUMENT],
                                ["-h","--help", GetoptLong::NO_ARGUMENT],
-                               ["-v","--verbose", GetoptLong::NO_ARGUMENT],
                                ["-f","--file", GetoptLong::REQUIRED_ARGUMENT],
                                ["-e","--extension", GetoptLong::REQUIRED_ARGUMENT],
                                ["-d","--database", GetoptLong::REQUIRED_ARGUMENT],
@@ -43,8 +40,6 @@ class Wurfl::Command::Loader < Wurfl::Command
         case opt
         when "-p"
           print = true
-        when "-v" 
-          verbose = true
         when "-h"
           usage
           exit 1
@@ -93,8 +88,6 @@ class Wurfl::Command::Loader < Wurfl::Command
       starttime = Time.now
       puts "Loading wurfl file #{wurflfile}" 
       
-      wurfll.verbose = verbose
-
       hands, fallbacks = wurfll.load_wurfl(wurflfile)
       restime = Time.now - starttime
       
