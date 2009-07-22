@@ -95,7 +95,7 @@ class Wurfl::Command::Inspector < Wurfl::Command
     end
 
     begin
-      handsets, = load_wurfl_pstore(pstorefile)    
+      handsets = load_wurfl_pstore(pstorefile)    
       insp = WurflInspector.new(handsets)
     rescue => err
       STDERR.puts "Error with file #{pstorefile}"

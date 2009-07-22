@@ -55,7 +55,7 @@ class Wurfl::Command::Uamatch < Wurfl::Command
     end
 
     begin
-      handsets, = load_wurfl_pstore(pstorefile)    
+      handsets = load_wurfl_pstore(pstorefile)    
       puts "Number of Handsets: #{handsets.length}"
       uamatch = Wurfl::UserAgentMatcher.new(handsets)
     rescue => err

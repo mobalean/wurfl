@@ -9,7 +9,7 @@ class TestLoader < Test::Unit::TestCase
   end
 
   def test_load_wurfl
-    handsets, fallbacks = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
+    handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
     assert_equal("20", handsets["apple_generic"]["columns"])
     assert_equal("11", handsets["generic_xhtml"]["columns"])
     assert_equal("11", handsets["generic"]["columns"])
@@ -21,7 +21,7 @@ class TestLoader < Test::Unit::TestCase
 
   def test_load_wurfl_from_string
     s = File.read(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
-    handsets, fallbacks = @loader.parse_xml(s)
+    handsets = @loader.parse_xml(s)
     assert_equal("300", handsets["apple_generic"]["max_image_height"])
   end
 

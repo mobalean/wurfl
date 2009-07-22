@@ -72,7 +72,6 @@ class Wurfl::Loader
 	  # the generic handset has not been created.  Make it
 	  hands = Wurfl::Handset.new "generic","generic"
 	  @handsets["generic"] = hands
-	  @fallbacks["generic"] = Array::new
 	end
 	
       else
@@ -92,12 +91,6 @@ class Wurfl::Loader
 	# get the fallback and copy it's values into this handset's hashtable
 	fallb = element.attributes["fall_back"]
 	
-	# for tracking of who has fallbacks
-	if !@fallbacks.key?(fallb)
-	  @fallbacks[fallb] = Array::new   
-	end
-	@fallbacks[fallb]<< hands.user_agent
-	
 	# Now set the handset to the proper fallback reference
 	if !@handsets.key?(fallb)
 	  # We have a fallback that does not exist yet, create the reference.
@@ -114,7 +107,7 @@ class Wurfl::Loader
       
     end
   
-    return @handsets, @fallbacks
+    @handsets
   end
 
 end

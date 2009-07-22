@@ -33,8 +33,8 @@ class Wurfl::Command::Comparator < Wurfl::Command
     # load the wurfl databases
     wurfl1 = wurfl2 = nil
     begin
-      wurfl1, = load_wurfl_pstore(ARGV[0])
-      wurfl2, = load_wurfl_pstore(ARGV[1])
+      wurfl1 = load_wurfl_pstore(ARGV[0])
+      wurfl2 = load_wurfl_pstore(ARGV[1])
     rescue => err
       efile = ""
       if wurfl1.nil?

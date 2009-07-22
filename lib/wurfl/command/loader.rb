@@ -71,7 +71,7 @@ class Wurfl::Command::Loader < Wurfl::Command
     if pstorefile && pstoreload
       begin
         puts "Loading  data from #{pstorefile}"
-        hands, fallbacks = load_wurfl_pstore(pstorefile)
+        hands = load_wurfl_pstore(pstorefile)
         puts "Loaded"
       rescue => err
         STDERR.puts "Error: Cannot load PStore file."
@@ -88,7 +88,7 @@ class Wurfl::Command::Loader < Wurfl::Command
       starttime = Time.now
       puts "Loading wurfl file #{wurflfile}" 
       
-      hands, fallbacks = wurfll.load_wurfl(wurflfile)
+      hands = wurfll.load_wurfl(wurflfile)
       restime = Time.now - starttime
       
       puts "Done loading wurfl.  Load took #{restime} seconds." 
@@ -96,7 +96,7 @@ class Wurfl::Command::Loader < Wurfl::Command
       if patchfile
         starttime = Time.now
         puts "Loading Patch file #{patchfile}"
-        hands, fallbacks = wurfll.load_wurfl(patchfile)
+        hands = wurfll.load_wurfl(patchfile)
         restime = Time.now - starttime
         puts "Done loading patchfile.  Load took #{restime} seconds." 
       end
@@ -106,7 +106,7 @@ class Wurfl::Command::Loader < Wurfl::Command
     if pstorefile && !pstoreload
       begin
         puts "Saving data into #{pstorefile}"
-        save_wurfl_pstore(pstorefile, hands, fallbacks)
+        save_wurfl_pstore(pstorefile, hands)
         puts "Saved"
       rescue => err
         STDERR.puts "Error: Cannot creat PStore file."

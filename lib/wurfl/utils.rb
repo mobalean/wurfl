@@ -10,22 +10,12 @@ module Wurfl::Utils
 
   # Does not catch exception, but throws to the caller.  
   def load_wurfl_pstore(pstorefile)
-    pstore = PStore.new(pstorefile)
-    handsets = fallbacks = nil
-    pstore.transaction do |ps|
-      handsets = ps["handsets"]
-      fallbacks = ps["fallback"]
-    end      
-    return handsets,fallbacks
+    PStore.new(pstorefile).transaction {|ps| ps["handsets"]}
   end
 
   #Also throws exceptions to the caller.
-  def save_wurfl_pstore(pstorefile,handsets,fallbacks)
-    store = PStore.new(pstorefile)
-    store.transaction do |ps|
-      ps["handsets"] = handsets
-      ps["fallback"] = fallbacks
-    end
+  def save_wurfl_pstore(pstorefile,handsets)
+    PStore.new(pstorefile).transaction {|ps| ps["handsets"] = handsets}
   end
 
 end

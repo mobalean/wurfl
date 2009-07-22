@@ -6,7 +6,7 @@ require 'test/unit'
 class UserAgentMatcherTest < Test::Unit::TestCase
   def setup
     loader = Wurfl::Loader.new
-    handsets, fallbacks = loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
+    handsets = loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
     @matcher = Wurfl::UserAgentMatcher.new(handsets)
   end
 
