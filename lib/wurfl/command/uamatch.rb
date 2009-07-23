@@ -72,8 +72,7 @@ class Wurfl::Command::Uamatch < Wurfl::Command
         puts "User_agent found: #{handset.user_agent}"
         if query
           puts "Result of handset query: #{query}"
-          rez = handset.get_value_and_owner(query)
-          puts "#{rez[0]} from #{rez[1]}"
+          puts "#{handset[query]} from #{handset.owner(query)}"
         end
       end
       exit 0

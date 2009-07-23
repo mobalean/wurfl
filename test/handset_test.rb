@@ -19,12 +19,12 @@ class TestHandset < Test::Unit::TestCase
     assert_nil @h["k"]
   end
 
-  def test_get_value_and_owner
-    assert_equal [nil, nil], @h.get_value_and_owner("k")
+  def test_owner
+    assert_equal nil, @h.owner("k")
     @f["k"] = "v"
-    assert_equal ["v", "f"], @h.get_value_and_owner("k")
+    assert_equal "f", @h.owner("k")
     @h["k"] = nil
-    assert_equal [nil, "h"], @h.get_value_and_owner("k")
+    assert_equal "h", @h.owner("k")
   end
 
   def test_keys

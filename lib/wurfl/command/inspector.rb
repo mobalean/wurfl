@@ -130,14 +130,12 @@ class Wurfl::Command::Inspector < Wurfl::Command
       puts "Handset user agent: #{handset.user_agent}"
       if query
         puts "Result of handset query: #{query}"
-        rez = handset.get_value_and_owner(query)
-        puts "#{rez[0]} from #{rez[1]}"
+        puts "#{handset[query]} from #{handset.owner(query)}"
       else
         puts "Attributes of handset"
         keys = handset.keys
         keys.each do |key|
-          rez = handset.get_value_and_owner(key)
-          puts "Attr:#{key} Val:#{rez[0]} from #{rez[1]}"
+          puts "Attr:#{key} Val:#{handset[key]} from #{handset.owner(key)}"
         end
       end
       exit 0

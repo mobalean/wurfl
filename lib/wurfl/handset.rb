@@ -37,16 +37,11 @@ class Wurfl::Handset
     @capabilityhash.key?(key) ? @capabilityhash[key] : @fallback[key]
   end
 
-  # like the above accessor, but also to know who the value
-  # comes from
   # Returns:
-  # the value and the id of the handset from which the value was obtained
-  def get_value_and_owner(key)
-    if @capabilityhash.key?(key)
-      [ @capabilityhash[key], @wurfl_id ]
-    else
-      @fallback.get_value_and_owner(key)
-    end
+  # the wurfl id of the handset from which the value of a capability is 
+  # obtained
+  def owner(key)
+    @capabilityhash.key?(key) ? @wurfl_id : @fallback.owner(key)
   end
 
   # Setter, A method to set a key and value of the handset.
@@ -88,7 +83,7 @@ class Wurfl::Handset
     end
 
     def [](key) nil end
-    def get_value_and_owner(key) [ nil, nil ] end
+    def owner(key) nil end
     def keys; [] end
   end
 end
