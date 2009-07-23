@@ -17,8 +17,7 @@ class Wurfl::Handset
   # fallback: is the fallback handset that this handset
   #           uses for missing details.
   def initialize (wurfl_id, useragent, fallback = nil) 
-    # A hash to hold keys and values specific to this handset
-    @capabilityhash = Hash::new 
+    @capabilities = {}
     @wurfl_id = wurfl_id
     @user_agent = useragent
     @fallback = fallback
@@ -34,24 +33,24 @@ class Wurfl::Handset
   # Returns:
   # The value of the key, nil if the handset does not have the key.
   def [] (key)
-    @capabilityhash.key?(key) ? @capabilityhash[key] : fallback[key]
+    @capabilities.key?(key) ? @capabilities[key] : fallback[key]
   end
 
   # Returns:
   # the wurfl id of the handset from which the value of a capability is 
   # obtained
   def owner(key)
-    @capabilityhash.key?(key) ? @wurfl_id : fallback.owner(key)
+    @capabilities.key?(key) ? @wurfl_id : fallback.owner(key)
   end
 
   # Setter, A method to set a key and value of the handset.
   def []= (key,val)
-    @capabilityhash[key] = val
+    @capabilities[key] = val
   end
   
   # A method to get all of the keys that the handset has.
   def keys
-    @capabilityhash.keys | fallback.keys
+    @capabilities.keys | fallback.keys
   end
 
   # A method to do a simple equality check against two handsets.
