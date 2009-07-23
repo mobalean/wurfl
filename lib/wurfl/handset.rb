@@ -7,8 +7,6 @@ A class that represents a handset based on information taken from the WURFL.
 =end
 class Wurfl::Handset
 
-  extend Enumerable
-
   attr_accessor :wurfl_id, :user_agent
   attr_reader :fallback
 
@@ -54,18 +52,6 @@ class Wurfl::Handset
   # Setter, A method to set a key and value of the handset.
   def []= (key,val)
     @capabilityhash[key] = val
-  end
-
-  # A Method to iterate over all of the keys and values that the handset has.
-  # Note: this will abstract the hash iterator to handle all the lower level
-  # calls for the fallback values.
-  def each
-    self.keys.each do |key|
-      # here is the magic that gives us the key and value of the handset
-      # all the way up to the fallbacks end.  
-      # Call the pass block with the key and value passed
-      yield key, self[key]
-    end
   end
   
   # A method to get all of the keys that the handset has.

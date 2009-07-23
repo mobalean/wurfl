@@ -33,14 +33,6 @@ class TestHandset < Test::Unit::TestCase
     assert_equal(["k1", "k2"], @h.keys)
   end
 
-  def test_each
-    @h["k1"] = "v1"
-    @f["k2"] = "v2"
-    a = []
-    @h.each {|k,v| a << [k,v]}
-    assert_equal [["k1","v1"], ["k2","v2"]], a
-  end
-
   def test_equivalence
     assert @h != nil
     assert @h != 1

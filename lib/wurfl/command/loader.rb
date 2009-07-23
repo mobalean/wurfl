@@ -11,7 +11,6 @@ class Wurfl::Command::Loader < Wurfl::Command
     puts "Usage: wurfltools.rb loader [-p -v -h -e patchfile] -f wurflfile"
     puts "       --file, -f (wurflfile): The master WURFL file to load."
     puts "       --extension, -e (patchfile): A patch file to extend the traits of the master WURLF file."
-    puts "       --print, -p : Prints out handsets."
     puts "       --help, -h : Prints this message."
     puts "       --database, -d (databasename): Makes a PStore database for quick loading of data with other tools."
     puts "       --load, -l (databasename): Loads handsets from a PStore database instead of XML file."
@@ -28,7 +27,6 @@ class Wurfl::Command::Loader < Wurfl::Command
 
     begin
       options = GetoptLong.new(
-                               ["-p","--print", GetoptLong::NO_ARGUMENT],
                                ["-h","--help", GetoptLong::NO_ARGUMENT],
                                ["-f","--file", GetoptLong::REQUIRED_ARGUMENT],
                                ["-e","--extension", GetoptLong::REQUIRED_ARGUMENT],
@@ -38,8 +36,6 @@ class Wurfl::Command::Loader < Wurfl::Command
       
       options.each do |opt,arg|
         case opt
-        when "-p"
-          print = true
         when "-h"
           usage
           exit 1
@@ -113,14 +109,5 @@ class Wurfl::Command::Loader < Wurfl::Command
         STDERR.puts err.message
       end
     end
-
-    if print 
-      hands.each do |key,value|
-        puts "********************************************\n\n"
-        puts "#{key}\n"
-        value.each { |key,value|   puts "#{key} = #{value}" }
-      end
-    end
-      
   end
 end
