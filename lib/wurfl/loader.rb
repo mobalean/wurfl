@@ -50,17 +50,15 @@ class Wurfl::Loader
   
   def parse_wurfl(doc)
     doc.find("///devices/device").each do |element| 
-      hands = nil
       wurfl_id = element.attributes["id"]  
-      hands = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
+      h = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
       fall_back_id = element.attributes["fall_back"]
       if fall_back_id != "root"
-        hands.fallback = @handsets[fall_back_id] ||= 
-          Wurfl::Handset.new("","")
+        h.fallback = @handsets[fall_back_id] ||= Wurfl::Handset.new("","")
       end
       
-      element.find("group/capability").each do |el2|
-        hands[el2.attributes["name"]] = el2.attributes["value"]
+      element.find("group/capability").each do |capability|
+        h[capability.attributes["name"]] = capability.attributes["value"]
       end
     end
   
