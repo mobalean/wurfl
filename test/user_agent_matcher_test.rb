@@ -13,14 +13,14 @@ class UserAgentMatcherTest < Test::Unit::TestCase
   def test_empty_user_agent
     a, shortest_distance = @matcher.match_handsets("")
     assert_equal 1, a.size
-    assert_equal "generic_xhtml", a.first.wurfl_id
-    assert_equal 4, shortest_distance
+    assert_equal "generic", a.first.wurfl_id
+    assert_equal 0, shortest_distance
   end
 
   def test_matching_user_agent
-    a, shortest_distance = @matcher.match_handsets("generic")
+    a, shortest_distance = @matcher.match_handsets("Mozz")
     assert_equal 1, a.size
-    assert_equal "generic", a.first.wurfl_id
+    assert_equal "generic_xhtml", a.first.wurfl_id
     assert_equal 0, shortest_distance
   end
 

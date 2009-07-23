@@ -18,6 +18,7 @@ class TestLoader < Test::Unit::TestCase
     assert_equal("92", handsets["generic_xhtml"]["max_image_height"])
     assert_equal("35", handsets["generic"]["max_image_height"])
 
+    assert_equal("", handsets["generic"].user_agent)
   end
 
   def test_patched_generic

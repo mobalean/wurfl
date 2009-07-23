@@ -52,13 +52,10 @@ class Wurfl::Loader
     doc.find("///devices/device").each do |element| 
       hands = nil
       wurfl_id = element.attributes["id"]  
-      if wurfl_id == "generic"
-        hands = @handsets[wurfl_id] ||= Wurfl::Handset.new("generic","generic")
-      else
-        hands = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
-        
-        hands.fallback = @handsets[element.attributes["fall_back"]
-] ||= Wurfl::Handset.new("","")
+      hands = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
+      if wurfl_id != "generic"
+        hands.fallback = @handsets[element.attributes["fall_back"]] ||= 
+          Wurfl::Handset.new("","")
       end
       
       element.find("group/capability").each do |el2|
