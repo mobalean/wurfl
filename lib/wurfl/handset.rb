@@ -8,7 +8,7 @@ A class that represents a handset based on information taken from the WURFL.
 class Wurfl::Handset
 
   attr_accessor :wurfl_id, :user_agent
-  attr_reader :fallback
+  attr_writer :fallback
 
   # Constructor
   # Parameters:
@@ -21,11 +21,11 @@ class Wurfl::Handset
     @capabilityhash = Hash::new 
     @wurfl_id = wurfl_id
     @user_agent = useragent
-    @fallback = fallback || NullHandset.instance
+    @fallback = fallback
   end
 
-  def fallback=(v)
-    @fallback = v || NullHandset.instance
+  def fallback
+   @fallback || NullHandset.instance
   end
 
   # Hash accessor
@@ -34,14 +34,14 @@ class Wurfl::Handset
   # Returns:
   # The value of the key, nil if the handset does not have the key.
   def [] (key)
-    @capabilityhash.key?(key) ? @capabilityhash[key] : @fallback[key]
+    @capabilityhash.key?(key) ? @capabilityhash[key] : fallback[key]
   end
 
   # Returns:
   # the wurfl id of the handset from which the value of a capability is 
   # obtained
   def owner(key)
-    @capabilityhash.key?(key) ? @wurfl_id : @fallback.owner(key)
+    @capabilityhash.key?(key) ? @wurfl_id : fallback.owner(key)
   end
 
   # Setter, A method to set a key and value of the handset.
@@ -51,7 +51,7 @@ class Wurfl::Handset
   
   # A method to get all of the keys that the handset has.
   def keys
-    @capabilityhash.keys | @fallback.keys
+    @capabilityhash.keys | fallback.keys
   end
 
   # A method to do a simple equality check against two handsets.
