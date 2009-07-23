@@ -15,11 +15,7 @@ handsets into a handset DB.
 =end
 class Wurfl::Loader
   
-  attr_accessor :new_hands, :ttl_keys
-
   def initialize 
-    @new_hands = 0
-    @ttl_keys = 0  
     @handsets = Hash::new
     @fallbacks = Hash::new
   end
