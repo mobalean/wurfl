@@ -17,7 +17,6 @@ class Wurfl::Loader
   
   def initialize 
     @handsets = Hash::new
-    @fallbacks = Hash::new
   end
 
   # A simple debuging method to print all user agents in a WURFL file
