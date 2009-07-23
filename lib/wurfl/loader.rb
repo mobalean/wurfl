@@ -1,5 +1,4 @@
 require "wurfl/handset"
-require "rexml/document"
 begin
   require "xml"
 rescue LoadError
@@ -18,23 +17,10 @@ class Wurfl::Loader
   def initialize 
     @handsets = Hash::new
   end
-
-  # A simple debuging method to print all user agents in a WURFL file
-  def print_handsets_in_wurfl(wurflfile)
-    file = File.new(wurflfile)
-    doc = REXML::Document.new file
-    doc.elements.each("wurfl/devices/device") do |element| 
-      puts element.attributes["user_agent"] 
-    end
-  end
   
   # Returns a Hashtable of handsets and a hashtable of Fallback id and agents
   def load_wurfl(wurflfilepath)
     parse_wurfl(XML::Document.file(wurflfilepath))
-  end
-
-  def parse_xml(s)
-    parse_wurfl(XML::Document.string(s))
   end
 
   # Prints out WURFL handsets from a hashtable
