@@ -115,7 +115,11 @@ class Wurfl::Command::Loader < Wurfl::Command
     end
 
     if print 
-      wurfll.print_wurfl hands
+      hands.each do |key,value|
+        puts "********************************************\n\n"
+        puts "#{key}\n"
+        value.each { |key,value|   puts "#{key} = #{value}" }
+      end
     end
       
   end

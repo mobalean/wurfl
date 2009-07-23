@@ -23,15 +23,6 @@ class Wurfl::Loader
     parse_wurfl(XML::Document.file(wurflfilepath))
   end
 
-  # Prints out WURFL handsets from a hashtable
-  def print_wurfl(handsets)
-    handsets.each do |key,value|
-      puts "********************************************\n\n"
-      puts "#{key}\n"
-      value.each { |key,value|   puts "#{key} = #{value}" }
-    end
-  end
-
   private
   
   def parse_wurfl(doc)
