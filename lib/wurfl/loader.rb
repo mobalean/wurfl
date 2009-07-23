@@ -20,12 +20,7 @@ class Wurfl::Loader
   
   # Returns a Hashtable of handsets and a hashtable of Fallback id and agents
   def load_wurfl(wurflfilepath)
-    parse_wurfl(XML::Document.file(wurflfilepath))
-  end
-
-  private
-  
-  def parse_wurfl(doc)
+    doc = XML::Document.file(wurflfilepath)
     doc.find("///devices/device").each do |element| 
       wurfl_id = element.attributes["id"]  
       h = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
@@ -41,6 +36,5 @@ class Wurfl::Loader
   
     @handsets
   end
-
 end
 
