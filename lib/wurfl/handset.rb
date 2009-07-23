@@ -10,6 +10,7 @@ class Wurfl::Handset
   extend Enumerable
 
   attr_accessor :wurfl_id, :user_agent
+  attr_reader :fallback
 
   # Constructor
   # Parameters:
