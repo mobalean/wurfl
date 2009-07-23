@@ -8,17 +8,14 @@ end
 
 module Wurfl; end
 
-=begin
-A class the handles the loading, debug printing and inserting of WURFL 
-handsets into a handset DB.
-=end
+# Handles the loading of WURFL handsets
 class Wurfl::Loader
   
   def initialize 
     @handsets = Hash::new
   end
   
-  # Returns a Hashtable of handsets and a hashtable of Fallback id and agents
+  # Returns a Hash of loaded handsets.
   def load_wurfl(wurflfilepath)
     doc = XML::Document.file(wurflfilepath)
     doc.find("///devices/device").each do |element| 
