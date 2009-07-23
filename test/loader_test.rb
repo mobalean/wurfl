@@ -28,5 +28,16 @@ class TestLoader < Test::Unit::TestCase
     assert_equal("6", handsets["generic"]["rows"])
   end
 
+  def test_load_reverse_wurfl
+    handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.reverse.xml"))
+    assert_equal("27", handsets["apple_generic"]["physical_screen_height"])
+    assert_equal("27", handsets["generic_xhtml"]["physical_screen_height"])
+    assert_equal("27", handsets["generic"]["physical_screen_height"])
+
+    assert_equal("Mozilla/5.0 (iPhone;", handsets["apple_generic"].user_agent)
+    assert_equal("Mozz", handsets["generic_xhtml"].user_agent)
+    assert_equal("", handsets["generic"].user_agent)
+  end
+
 end
 

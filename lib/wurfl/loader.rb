@@ -17,19 +17,20 @@ class Wurfl::Loader
   
   # Returns a Hash of loaded handsets.
   def load_wurfl(wurflfilepath)
+    fallbacks = {}
     doc = XML::Document.file(wurflfilepath)
     doc.find("///devices/device").each do |element| 
       wurfl_id = element.attributes["id"]  
       h = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
       fall_back_id = element.attributes["fall_back"]
-      if fall_back_id != "root"
-        h.fallback = @handsets[fall_back_id] ||= Wurfl::Handset.new("","")
-      end
+      fallbacks[wurfl_id] = fall_back_id unless fall_back_id == "root"
       
       element.find("group/capability").each do |capability|
         h[capability.attributes["name"]] = capability.attributes["value"]
       end
     end
+
+    fallbacks.each {|k,v| @handsets[k].fallback = @handsets[v]}
   
     @handsets
   end
