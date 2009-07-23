@@ -53,8 +53,9 @@ class Wurfl::Loader
       hands = nil
       wurfl_id = element.attributes["id"]  
       hands = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
-      if wurfl_id != "generic"
-        hands.fallback = @handsets[element.attributes["fall_back"]] ||= 
+      fall_back_id = element.attributes["fall_back"]
+      if fall_back_id != "root"
+        hands.fallback = @handsets[fall_back_id] ||= 
           Wurfl::Handset.new("","")
       end
       
