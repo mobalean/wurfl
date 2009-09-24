@@ -108,13 +108,13 @@ class Wurfl::Command::Inspector < Wurfl::Command
       eval("pr = proc#{procstr}")
       
       if pr.class != Proc
-        puts "You must pass a valid ruby block!"
+        STDERR.puts "You must pass a valid ruby block!"
         exit 1
       end
       
-      puts "--------- Searching handsets -----------"
+      STDERR.puts "--------- Searching handsets -----------"
       res = insp.search_handsets(pr)
-      puts "Number of results: #{res.size}"
+      STDERR.puts "Number of results: #{res.size}"
       
       res.each { |handset| puts handset.wurfl_id }
       exit 0
