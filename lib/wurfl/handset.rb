@@ -7,7 +7,7 @@ A class that represents a handset based on information taken from the WURFL.
 =end
 class Wurfl::Handset
 
-  attr_accessor :wurfl_id, :user_agent
+  attr_accessor :wurfl_id, :user_agent, :actual_device
   attr_writer :fallback
 
   # Constructor
@@ -16,10 +16,11 @@ class Wurfl::Handset
   # useragent: is the user agent of the handset
   # fallback: is the fallback handset that this handset
   #           uses for missing details.
-  def initialize (wurfl_id, useragent, fallback = nil) 
+  def initialize (wurfl_id, useragent, fallback = nil, actualdevice = nil) 
     @capabilities = {}
     @wurfl_id = wurfl_id
     @user_agent = useragent
+    @actual_device = actualdevice
     @fallback = fallback
   end
 

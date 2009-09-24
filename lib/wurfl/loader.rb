@@ -21,7 +21,7 @@ class Wurfl::Loader
     doc = XML::Document.file(wurflfilepath)
     doc.find("///devices/device").each do |element| 
       wurfl_id = element.attributes["id"]  
-      h = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"])
+      h = @handsets[wurfl_id] ||= Wurfl::Handset.new(wurfl_id, element.attributes["user_agent"], nil, element.attributes["actual_device_root"])
       fall_back_id = element.attributes["fall_back"]
       fallbacks[wurfl_id] = fall_back_id unless fall_back_id == "root"
       
