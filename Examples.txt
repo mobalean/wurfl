@@ -1,0 +1,25 @@
+First step to do anything is to merge the patch and the base wurfl
+into a pstore database.
+
+1 Get latest wurfl base and unzip it
+
+wget http://jaist.dl.sourceforge.net/sourceforge/wurfl/wurfl-latest.xml.gz
+gunzip wurfl-latest.xml.gz
+
+2 Using the wurfltools.rb utility, merge the patch to the base wurfl
+and output as a pstore database.
+
+wurfltools.rb loader -f ./wurfl-latest.xml -e wurfl.patch.xml -d handsetpstore.db
+
+
+Now we can perform various operations, such as output a csv file
+containing japanese carrier handset uer agents and the supported flash
+lite version.
+
+
+wurfltools.rb inspector -d handsetpstore.db -s '{|h| puts
+h.user_agent+","+h["flash_lite_version"] if ( h.actual_device=="true"
+&& h.user_agent =~/^(docomo|kddi|softbank)/i) }' | sort | uniq
+
+
+
