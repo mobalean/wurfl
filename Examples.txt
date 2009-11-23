@@ -23,3 +23,5 @@ h.user_agent+","+h["flash_lite_version"] if ( h.actual_device=="true"
 
 
 
+Output browser width and height
+./bin/wurfltools.rb inspector -d handsetpstore-november.db -s '{|h| puts h["model_name"]+","+h["resolution_width"]+","+h["resolution_height"] if (h.actual_device && h.user_agent=~/^(docomo|kddi|softbank|voda)/i) }' | sort | uniq
