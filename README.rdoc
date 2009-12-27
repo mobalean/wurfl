@@ -156,6 +156,14 @@ errors.
 * Paul McMahon (gem installer, refactorings)
 * Kai W. Zimmermann (uamatch)
 
+== Contribution
+
+All contribution is welcome.  Please see the repo at http://github.com/pwim/wurfl.
+
+== License
+
+See LICENSE[link:files/LICENSE.html]
+
 == Copyright
 
 Copyright (c) 2009, mobalean (http://www.mobalean.com/)

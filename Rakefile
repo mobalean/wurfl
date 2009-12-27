@@ -29,7 +29,7 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'WURFL'
   rdoc.main     = "README.rdoc"
-  rdoc.rdoc_files.include("README.rdoc", "lib/**/*.rb")
+  rdoc.rdoc_files.include("README.rdoc", "LICENSE", "lib/**/*.rb")
 end
 
 begin
