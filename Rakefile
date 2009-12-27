@@ -16,8 +16,7 @@ begin
     s.summary = "Library and tools for manipulating the WURFL"
     s.description = "Library and tools for manipulating the WURFL"
     s.email = "info@mobalean.com"
-    s.homepage = "http://github.com/pwim/wurfl"
-    s.description = "TODO"
+    s.homepage = "http://wurfl.rubyforge.org"
     s.authors = ["Paul McMahon", "Zev Blut"]
     s.rubyforge_project = 'wurfl'
   end

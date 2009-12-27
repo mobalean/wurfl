@@ -5,13 +5,13 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wurfl}
-  s.version = "1.3.3"
+  s.version = "1.3.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Paul McMahon", "Zev Blut"]
   s.date = %q{2009-12-27}
   s.default_executable = %q{wurfltools.rb}
-  s.description = %q{TODO}
+  s.description = %q{Library and tools for manipulating the WURFL}
   s.email = %q{info@mobalean.com}
   s.executables = ["wurfltools.rb"]
   s.extra_rdoc_files = [
@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
      "test/utils_test.rb",
      "wurfl.gemspec"
   ]
-  s.homepage = %q{http://github.com/pwim/wurfl}
+  s.homepage = %q{http://wurfl.rubyforge.org}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{wurfl}
