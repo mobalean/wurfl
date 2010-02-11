@@ -1,6 +1,7 @@
 require 'rake/rdoctask'
 require 'rake/testtask'
 require 'rubygems'
+require 'shoulda/tasks'
 
 task :default => ['test']
 

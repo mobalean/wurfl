@@ -1,41 +1,69 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 require 'wurfl/loader'
 
-class TestLoader < Test::Unit::TestCase
+class LoaderTest < Test::Unit::TestCase
+
+  class << self
+    def should_have_correct_values(h)
+      h.each do |wurfl_id, values|
+        values.each do |key, value|
+          should "have #{key} set to #{value} for #{wurfl_id}" do
+            assert_equal value.to_s, @handsets[wurfl_id.to_s][key.to_s]
+          end
+        end
+      end
+    end
+  
+    def should_have_correct_user_agents(h)
+      h.each do |wurfl_id, user_agent|
+        should "have user agent '#{user_agent}' for #{wurfl_id}" do
+          assert_equal user_agent, @handsets[wurfl_id.to_s].user_agent
+        end
+      end
+    end
+  end
 
   def setup
     @loader = Wurfl::Loader.new
   end
 
-  def test_load_wurfl
-    handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
-    assert_equal("20", handsets["apple_generic"]["columns"])
-    assert_equal("11", handsets["generic_xhtml"]["columns"])
-    assert_equal("11", handsets["generic"]["columns"])
+  context "loaded base wurfl" do
+    setup do
+      @handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
+    end
+    should_have_correct_values(
+      :apple_generic => { :columns => 20, :max_image_height => 300, :physical_screen_height => 27 },
+      :generic_xhtml => { :columns => 11, :max_image_height => 92, :physical_screen_height => 27 },
+      :generic => { :columns => 11, :max_image_height => 35, :physical_screen_height => 27 }
+    )
+    should_have_correct_user_agents(
+      :generic => "",
+      :apple_generic => "Mozilla/5.0 (iPhone;",
+      :generic_xhtml => "Mozz"
+    )
 
-    assert_equal("300", handsets["apple_generic"]["max_image_height"])
-    assert_equal("92", handsets["generic_xhtml"]["max_image_height"])
-    assert_equal("35", handsets["generic"]["max_image_height"])
-
-    assert_equal("", handsets["generic"].user_agent)
+    context 'and patch' do
+      setup do
+        @handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.generic.patch.xml"))
+      end
+      should_have_correct_values(:generic => { :columns => 200, :rows => 6 })
+    end
   end
 
-  def test_patched_generic
-    @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.simple.xml"))
-    handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.generic.patch.xml"))
-    assert_equal("200", handsets["generic"]["columns"])
-    assert_equal("6", handsets["generic"]["rows"])
-  end
-
-  def test_load_reverse_wurfl
-    handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.reverse.xml"))
-    assert_equal("27", handsets["apple_generic"]["physical_screen_height"])
-    assert_equal("27", handsets["generic_xhtml"]["physical_screen_height"])
-    assert_equal("27", handsets["generic"]["physical_screen_height"])
-
-    assert_equal("Mozilla/5.0 (iPhone;", handsets["apple_generic"].user_agent)
-    assert_equal("Mozz", handsets["generic_xhtml"].user_agent)
-    assert_equal("", handsets["generic"].user_agent)
+  context "loaded wurfl with handsets in reverse order" do
+    setup do
+      @handsets = @loader.load_wurfl(File.join(File.dirname(__FILE__), "data", "wurfl.reverse.xml"))
+    end
+    should_have_correct_values(
+      :apple_generic => { :columns => 20, :max_image_height => 300, :physical_screen_height => 27 },
+      :generic_xhtml => { :columns => 11, :max_image_height => 92, :physical_screen_height => 27 },
+      :generic => { :columns => 11, :max_image_height => 35, :physical_screen_height => 27 }
+    )
+    should_have_correct_user_agents(
+      :generic => "",
+      :apple_generic => "Mozilla/5.0 (iPhone;",
+      :generic_xhtml => "Mozz"
+    )
   end
 
 end

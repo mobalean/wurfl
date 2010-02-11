@@ -1,78 +1,110 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 require 'wurfl/handset'
 
-class TestHandset < Test::Unit::TestCase
+class HandsetTest < Test::Unit::TestCase
   def setup
-    @f = Wurfl::Handset.new("f", "f", nil)
-    @h = Wurfl::Handset.new("h", "h", @f)
-    
-    @f2 = Wurfl::Handset.new("f2", "f2_ua", nil)
-    @h2 = Wurfl::Handset.new("h2","h2_ua", @f2)
+    @fallback = Wurfl::Handset.new("fallback_id", "f", nil)
+    @handset = Wurfl::Handset.new("handset_id", "h", @fallback)
   end
 
-  def test_f
-    assert_nil @h["capability"]
-    @f["k"] = "v"
-    assert_equal "v", @h["k"]
-    @h["k"] = nil
-    assert_nil @h["k"]
+  should("not be equal to nil") { assert_not_equal @handset, nil }
+  should("not be equal to 1") { assert_not_equal @handset, 1 }
+  should("not be equal to fallback") { assert_not_equal @handset, @fallback }
+  should("equal self") { assert_equal @handset, @handset }
+  should("not have differences") { assert @handset.differences(@fallback).empty? }
+
+  context "key not set" do
+    should("not have value") { assert_nil @handset["k"] }
+    should("not have owner") { assert_equal nil, @handset.owner("k") }
   end
 
-  def test_owner
-    assert_equal nil, @h.owner("k")
-    @f["k"] = "v"
-    assert_equal "f", @h.owner("k")
-    @h["k"] = nil
-    assert_equal "h", @h.owner("k")
+  context "fallback key set" do
+    setup { @fallback["k"] = "v" }
+
+    should("fetch value from fallback") { assert_equal "v", @handset["k"] }
+    should("have fallback as owner") { assert_equal "fallback_id", @handset.owner("k") }
+
+    context "and handset overwrites key" do
+      setup { @handset["k"] = nil }
+
+      should("fetch value from handset") { assert_nil @handset["k"] }
+      should("have handset as owner") { assert_equal "handset_id", @handset.owner("k") }
+    end
   end
 
-  def test_keys
-    @h["k1"] = "v1"
-    @f["k2"] = "v2"
-    assert_equal(["k1", "k2"], @h.keys)
+  context "fallback and handset set different keys" do
+    setup do
+      @handset["k1"] = "v1"
+      @fallback["k2"] = "v2"
+    end
+
+    should("have keys from handset and fallback") { assert_equal(["k1", "k2"], @handset.keys) }
   end
 
-  def test_equivalence
-    assert @h != nil
-    assert @h != 1
-    assert @h != @f
-    assert @h == @h
-    h2 = Wurfl::Handset.new("h","h", @f)
-    assert @h == h2
-    h2["k"] = "v"
-    assert @h != h2
-    @f["k"] = "v"
-    assert @h == h2
-  end
+  context "another handset with same wurfl_id and fallback" do
+    setup { @another_handset = Wurfl::Handset.new("handset_id","h", @fallback) }
 
-  def test_differences_handset_with_unmodified_fallback
-    assert @h.differences(@f).empty?
-  end
+    should("equal handset") { assert_equal @handset, @another_handset}
 
-  def test_differences_handset_with_identical_handset
-    assert @h.differences(@h2).empty?
-  end
+    context "and the other handset sets a key" do
+      setup { @another_handset["k"] = "v" }
 
-  def test_differences_handset_that_has_extra_key
-    @h["k"] = "v"
-    assert_equal ["k"], @h.differences(@h2)
-  end
+      should("not equal handset") { assert_not_equal @handset, @another_handset }
 
-  def test_differences_other_handset_that_has_extra_key
-    @h2["k"] = "v"
-    assert_equal ["k"], @h.differences(@h2)
-  end
+      context "and the fallback sets identical key" do
+        setup { @fallback["k"] = "v" }
 
-  def test_differences_handset_that_has_differing_key_value
-    @h["k"] = "v"
-    @h2["k"] = "v2"
-    assert_equal ["k"], @h.differences(@h2)
+        should("equal handset") { assert_equal @handset, @another_handset }
+      end
+    end
   end
+  
+  context "another handset with different wurfl_id and fallback" do
+    setup do
+      @another_fallback = Wurfl::Handset.new("f2", "f2_ua", nil)
+      @another_handset = Wurfl::Handset.new("h2","h2_ua", @another_fallback)
+    end
 
-  def test_differences_handsets_with_differening_fallback_key_value
-    @f["j"] = "1"
-    @f2["j"] = "2"
-    assert_equal ["j"], @h.differences(@h2)
+    context "and no keys set" do
+      should('have no differences') {assert @handset.differences(@another_fallback).empty? }
+    end
+
+    context "and the other handset has a key set" do
+      setup { @another_handset["k"] = "v" }
+
+      should('have the key as a difference') do
+        assert_equal ["k"], @handset.differences(@another_handset)
+      end
+    end
+
+    context "and handset has a key set" do
+      setup { @handset["k"] = "v" }
+
+      should('have the key as a difference') do
+        assert_equal ["k"], @handset.differences(@another_handset)
+      end
+    end
+
+    context "and both handsets have different values for same key" do
+      setup do
+        @handset["k"] = "v"
+        @another_handset["k"] = "v2"
+      end
+
+      should 'have the key as a difference' do
+        assert_equal ["k"], @handset.differences(@another_handset)
+      end
+    end
+
+    context "and fallbacks have different values for same key" do
+      setup do
+        @fallback["j"] = "1"
+        @another_fallback["j"] = "2"
+      end
+
+      should 'have the key as a difference' do
+        assert_equal ["j"], @handset.differences(@another_handset)
+      end
+    end
   end
-
 end
