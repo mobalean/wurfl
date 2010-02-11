@@ -48,6 +48,8 @@ class LoaderTest < Test::Unit::TestCase
       end
       should_have_correct_values(:generic => { :columns => 200, :rows => 6 })
     end
+    should("not be actual device for generic") { assert !@handsets["generic"].actual_device? }
+    should("be actual device for apple_iphone_ver1") { assert @handsets["apple_iphone_ver1"].actual_device? }
   end
 
   context "loaded wurfl with handsets in reverse order" do

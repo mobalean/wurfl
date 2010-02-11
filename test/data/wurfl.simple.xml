@@ -34,5 +34,22 @@
       <capability name="max_image_height" value="300"/>
     </group>
   </device>
+  <device id="apple_iphone_ver1" user_agent="Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A538a Safari/419.3" fall_back="apple_generic" actual_device_root="true">
+    <group id="product_info">
+      <capability name="mobile_browser" value="Safari"/>
+      <capability name="pointing_method" value="touchscreen"/>
+      <capability name="model_name" value="iPhone"/>
+      <capability name="device_os_version" value="1.0"/>
+    </group>
+    <group id="display">
+      <capability name="physical_screen_height" value="74"/>
+      <capability name="dual_orientation" value="true"/>
+      <capability name="physical_screen_width" value="49"/>
+      <capability name="max_image_width" value="320"/>
+      <capability name="resolution_height" value="480"/>
+      <capability name="resolution_width" value="320"/>
+      <capability name="max_image_height" value="360"/>
+    </group>
+  </device>
 </devices>
 </wurfl>
