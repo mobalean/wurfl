@@ -1,7 +1,6 @@
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
+require File.join(File.dirname(__FILE__), 'test_helper')
 require 'wurfl/user_agent_matcher'
 require 'wurfl/loader'
-require 'test/unit'
 
 class UserAgentMatcherTest < Test::Unit::TestCase
   def setup

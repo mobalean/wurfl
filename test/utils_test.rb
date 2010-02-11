@@ -1,7 +1,6 @@
-$LOAD_PATH << File.join(File.dirname(__FILE__), '..', 'lib')
+require File.join(File.dirname(__FILE__), 'test_helper')
 require 'wurfl/utils'
 require 'wurfl/loader'
-require 'test/unit'
 require 'tempfile'
 
 class TestLoader < Test::Unit::TestCase
