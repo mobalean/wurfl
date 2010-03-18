@@ -20,6 +20,7 @@ begin
     s.homepage = "http://wurfl.rubyforge.org"
     s.authors = ["Paul McMahon", "Zev Blut"]
     s.rubyforge_project = 'wurfl'
+    s.add_dependency 'libxml-ruby'
   end
   Jeweler::RubyforgeTasks.new do |rubyforge|
     rubyforge.doc_task = "rdoc"
