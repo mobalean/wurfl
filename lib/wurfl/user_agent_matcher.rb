@@ -28,6 +28,10 @@ class Wurfl::UserAgentMatcher
       hand.user_agent.length > m ? hand.user_agent.length : m
     end
     @d=(0..@longest_user_agent_length).to_a
+    @unpack_rule = 'C*'
+    if RUBY_VERSION < "1.9"
+      @unpack_rule = ($KCODE =~ /^U/i) ? 'U*' : 'C*'
+    end
   end
 
   # A method to retrieve a list of the uamatcher's handsets that match
@@ -41,7 +45,7 @@ class Wurfl::UserAgentMatcher
   def match_handsets(user_agent)
     rez = []
     shortest_distance = [user_agent.length, @longest_user_agent_length].max
-    s = user_agent.unpack(unpack_rule)
+    s = user_agent.unpack(@unpack_rule)
 
     @handsets.values.each do |hand|    
       distance = levenshtein_distance(user_agent, hand.user_agent, shortest_distance, s)
@@ -87,7 +91,7 @@ class Wurfl::UserAgentMatcher
     diff = (str1.length - str2.length).abs
     return 0 if diff == 0 && str1 == str2
     return diff if diff > min
-    t = str2.unpack(unpack_rule)
+    t = str2.unpack(@unpack_rule)
     distance(s, t, min)
   end
 
@@ -134,9 +138,5 @@ class Wurfl::UserAgentMatcher
       return x - n + i + 1 if x - n + i + 1 > min
     end
     x
-  end
-
-  def unpack_rule
-    $KCODE =~ /^U/i ? 'U*' : 'C*'
   end
 end
