@@ -1,6 +1,6 @@
 require 'rake/rdoctask'
 require 'rake/testtask'
-# require 'rubygems'
+require 'rubygems' if RUBY_VERSION < "1.9"
 require 'shoulda/tasks'
 
 task :default => ['test']
@@ -8,7 +8,7 @@ task :default => ['test']
 Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/*_test.rb']
   t.ruby_opts = ['-I"."']
-#  t.ruby_opts = ['-rubygems'] if defined? Gem
+  t.ruby_opts = ['-rubygems'] if RUBY_VERSION < "1.9" && defined? Gem
 end
 
 begin
