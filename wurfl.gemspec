@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Paul McMahon", "Zev Blut"]
   spec.email         = ["paul@doorkeeper.jp"]
 
-  spec.summary       = %q{Library and tools for manipulating the WURFL}
-  spec.description   = %q{Library and tools for manipulating the WURFL}
+  spec.summary       = %q{This gem is no longer maintained. Official Ruby support for WURFL is offered commercially by ScientiaMobile. More details at: https://www.scientiamobile.com/page/wurfl-infuze.}
+  spec.description   = %q{This gem is no longer maintained. Official Ruby support for WURFL is offered commercially by ScientiaMobile. More details at: https://www.scientiamobile.com/page/wurfl-infuze.}
   spec.homepage      = "https://github.com/mobalean/wurfl"
   spec.license       = "BSD 3-Clause"
 
@@ -33,4 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+
+  spec.post_install_message = %q{The `wurfl` gem is no longer maintained. Official Ruby support for WURFL is offered commercially by ScientiaMobile. More details at: https://www.scientiamobile.com/page/wurfl-infuze.}
 end

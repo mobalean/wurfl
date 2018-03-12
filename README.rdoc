@@ -1,3 +1,5 @@
+*This gem is no longer maintained. Official Ruby support for WURFL is offered commercially by ScientiaMobile. More details at: https://www.scientiamobile.com/page/wurfl-infuze.*
+
 = WURFL
 
 WURFL is a collection of libraries and command line tools for using and manipulating the WURFL.  To start using it, simply install the gem:
@@ -65,21 +67,21 @@ backlight capability:
 === uamatch
 
 Is a tool that will let you do various searches and queries on the
-WURFL based on user-agent strings.  This is a very simple, yet powerful 
-program for finding information about the handsets in the WURFL.  
+WURFL based on user-agent strings.  This is a very simple, yet powerful
+program for finding information about the handsets in the WURFL.
 See the uamatch examples section for usage.
 
-The uamatcher will retrieve the handset descriptions with the closest 
+The uamatcher will retrieve the handset descriptions with the closest
 Levenshtein distance (also called the edit distance) to the user-agent
-string you pass as argument.  
+string you pass as argument.
 
 For details see:  http://en.wikipedia.org/wiki/Levenshtein_distance
 
 When more than one handset has the same distance to the user agent string queried,
 the command will iterate over the result set and print the result for each handset.
 
-The found wurfl_ids can serve as input to the inspector command.  
-You can also specifically query for a certain capability. 
+The found wurfl_ids can serve as input to the inspector command.
+You can also specifically query for a certain capability.
 
 ==== Usage
 
@@ -119,17 +121,17 @@ The mappings are not fully complete and can certainly use your input
 in improving them.
 
 About the source code:
-The main piece of code to read are the methods under the 
+The main piece of code to read are the methods under the
 "UAProfile Mappings" comment.
 
 For now you can ignore the details above this comment.
 Basically each method is the name of a UAProfifle component.
 When you parse a UAProfile file it will call each UAProfile
-component's method name.  
+component's method name.
 
-So you can simply look at UAProfile component's method to see 
+So you can simply look at UAProfile component's method to see
 how it maps to the WURFL.
-If a component is not found as a method it will be logged to 
+If a component is not found as a method it will be logged to
 Standard Error.  For this log one can then add the method to
 the UAProfToWurfl class later.
 
@@ -141,9 +143,9 @@ A simple usage is:
 
 Example use from a bash shell with many profiles:
 
-  for i in `ls profiles`; do 
-    wurfltools.rb uaproftowurfl profiles/$i >output/$i.wurfl 
-    2> output/$i.parser.err; 
+  for i in `ls profiles`; do
+    wurfltools.rb uaproftowurfl profiles/$i >output/$i.wurfl
+    2> output/$i.parser.err;
   done
 
 This assumes that you have a profiles directory with all of the UAProf
